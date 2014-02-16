@@ -1,35 +1,62 @@
 package edu.brown.cs032.ltbarnes.stars.startree;
 
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDNode;
 
-class StarNode implements KDNode {
+class StarNode {
 
-	private KDNode left_;
-	private KDNode right_;
-	private Star star;
+	private StarNode left_;
+	private StarNode right_;
+	private int depth_;
+	private final Star star;
 
 	public StarNode(Star star) {
 		this.star = star;
 	}
+	
+	public StarNode(Star star, int depth) {
+		this.depth_ = depth;
+		this.star = star;
+	}
+	
+	public Star getStar() {
+		return star;
+	}
+	
+	public double getDimension(int dim) {
+		return star.coordinates.get(dim);
+	}
+	
+	public void setDepth(int depth) {
+		this.depth_ = depth;
+	}
+	
+	public int getDepth() {
+		return depth_;
+	}
 
-	@Override
-	public void setLeftChild(KDNode left) {
+	public void setLeftChild(StarNode left) {
 		this.left_ = left;
 	}
 
-	@Override
-	public void setRightChild(KDNode right) {
+	public void setRightChild(StarNode right) {
 		this.right_ = right;
 	}
 
-	@Override
-	public KDNode getLeftChild() {
+	public StarNode getLeftChild() {
 		return left_;
 	}
 
-	@Override
-	public KDNode getRightChild() {
+	public StarNode getRightChild() {
 		return right_;
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof StarNode))
+			return false;
+		
+		return ((StarNode)o).getStar().equals(star);
 	}
 	
 	@Override

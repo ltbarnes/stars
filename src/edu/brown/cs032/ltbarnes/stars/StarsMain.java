@@ -12,18 +12,13 @@ import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 public class StarsMain {
 
 	public static void main(String[] args) {
-		StarsMain sm = new StarsMain();
 		List<Star> stars;
-		if ((stars = sm.parseInput(args)) == null)
+		if ((stars = StarsMain.parseInput(args)) == null)
 			return;
-		sm.runStars(stars);
+		StarsMain.runStars(stars);
 	}
 
-	public StarsMain() {
-		super();
-	}
-
-	public List<Star> parseInput(String[] args) {
+	public static List<Star> parseInput(String[] args) {
 		if (args.length == 0) {
 			System.err.println("ERROR: No filename given\n");
 			return null;
@@ -70,7 +65,7 @@ public class StarsMain {
 		return stars;
 	}
 
-	public void runStars(List<Star> stars) {
+	public static void runStars(List<Star> stars) {
 		StarTree st = new StarTree(stars);
 		System.out.println("Ready");
 		new StarsConsole(st);
