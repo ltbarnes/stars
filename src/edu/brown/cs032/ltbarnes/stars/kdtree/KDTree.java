@@ -13,8 +13,8 @@ public interface KDTree<T extends Graphable> {
 
 	public boolean removeElement(T e);
 
-	public Set<? extends KDElement> findNearest(T e);
+	public Set<? extends KDElement> kNNSearch(T e, int numNearest);
 
-	public Set<? extends KDElement> findNearestWithRadius(T e, int radius);
+	public Set<? extends KDElement> kNNSearchWithRadius(T e, int radius);
 
 }
