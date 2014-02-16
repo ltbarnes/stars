@@ -96,13 +96,14 @@ public class StarTree extends AbstractCollection<StarNode> implements KDTree<Sta
 		if (star.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
 			result = searchcursion(leftChild, star, numNearest);
 			otherChild = rightChild;
-		} else if (current.getRightChild() != null) {
+		} else if (rightChild != null) {
 			result = searchcursion(rightChild, star, numNearest);
 			otherChild = leftChild;
 		} else {
 			result = current;
 			otherChild = leftChild;
 		}
+
 		double minDist = starDist2(result.getStar(), star.getStar());
 		double currDist = starDist2(current.getStar(), star.getStar());
 
@@ -110,14 +111,23 @@ public class StarTree extends AbstractCollection<StarNode> implements KDTree<Sta
 			result = current;
 			minDist = currDist;
 		}
-		Star s = current.getStar();
+		Star s = star.getStar();
 		Double[] coords = new Double[3];
 		s.coordinates.toArray(coords);
 		coords[dim] = current.getDimension(dim);
 
-		double distPlane = starDist2(new Star("", "", coords[0], coords[1], coords[2]), star.getStar());
-		if (distPlane < minDist)
-			result = searchcursion(otherChild, star, numNearest);
+		StarNode other;
+		double distPlane = starDist2(new Star("", "", coords[0], coords[1], coords[2]), s);
+		if (distPlane < minDist && otherChild != null) {
+			other = searchcursion(otherChild, star, numNearest);
+
+			double newDist = starDist2(other.getStar(), star.getStar());
+
+			if (newDist < minDist) {
+				result = other;
+				minDist = newDist;
+			}
+		}
 
 		return result;
 	}

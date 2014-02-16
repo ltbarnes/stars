@@ -1,7 +1,7 @@
-package edu.brown.cs032.ltbarnes.stars.tests;
+package edu.brown.cs032.ltbarnes.stars.startree;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -10,9 +10,6 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.Test;
-
-import edu.brown.cs032.ltbarnes.stars.startree.Star;
-import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
 public class StarTreeTest {
 
@@ -117,20 +114,36 @@ public class StarTreeTest {
 	}
 
 	@Test
+	public void testDist2Plane() {
+		StarNode star = new StarNode(new Star("", "", 1, 1, 1));
+		StarNode current = new StarNode(new Star("", "", 0, -4, 7),0);
+		int dim = current.getDepth() % 3;
+		assertEquals(0, dim);
+		Star s = star.getStar();
+		Double[] coords = new Double[3];
+		s.coordinates.toArray(coords);
+		coords[dim] = current.getDimension(dim);
+		Double[] correct = {0.0, 1.0, 1.0};
+		assertArrayEquals(correct, coords);
+		assertEquals(1, StarTree.starDist2(new Star("", "", coords[0], coords[1], coords[2]), s), 1e-12);
+		
+	}
+
+	@Test
 	public void testFindNearestSingle() {
 		List<Star> stars = new ArrayList<>();
-		Star s00 = new Star("0", "", -1, 0, 0);
-		Star s11 = new Star("1", "", 0, 0, 0);
-		Star s22 = new Star("2", "", 1, 0, 0);
-		
+		Star s00 = new Star("00", "", -1, 0, 0);
+		Star s11 = new Star("11", "", 0, 0, 0);
+		Star s22 = new Star("22", "", 1, 0, 0);
+
 		stars.add(s00);
 		stars.add(s11);
 		stars.add(s22);
-		
+
 		StarTree st = new StarTree(stars);
-		
-		assertEquals("(1: L:(0: L:null R:null) R:(2: L:null R:null))", st.toString());
-		
+
+		assertEquals("(11: L:(00: L:null R:null) R:(22: L:null R:null))", st.toString());
+
 		Set<Star> starSet = new HashSet<>();
 		starSet.add(s11);
 		assertEquals(starSet, st.kNNSearch(new Star("", "", 0, 0, 1), 1));
@@ -181,10 +194,10 @@ public class StarTreeTest {
 		starSet.add(s5);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 1));
 		starSet.clear();
-		starSet.add(s8);
+		starSet.add(s7);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", 4, -2, 1), 1));
 		starSet.clear();
-		starSet.add(s0);
+		starSet.add(s9);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", 5, 0, 0), 1));
 		starSet.clear();
 		starSet.add(s0);
