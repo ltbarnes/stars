@@ -91,7 +91,6 @@ public class Stars {
 	}
 
 	public void printStars(List<Star> stars) {
-		System.out.println();
 		for (Star star : stars)
 			System.out.println(star.value);
 		System.out.println();
