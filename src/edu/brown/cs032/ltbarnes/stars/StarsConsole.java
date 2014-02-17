@@ -5,14 +5,14 @@ import java.util.Scanner;
 
 import edu.brown.cs032.ltbarnes.stars.Stars.Command;
 import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
-import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
+import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
 public class StarsConsole {
 
 	public static final String CMD_ERR = "ERROR: usage: \n\t\t blah";
 	private Stars stars_;
 
-	public StarsConsole(StarTree tree) {
+	public StarsConsole(KDTree<Star> tree) {
 		stars_ = new Stars(tree);
 
 		startReadWriteLoop();

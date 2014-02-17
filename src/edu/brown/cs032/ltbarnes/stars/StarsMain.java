@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
@@ -31,7 +32,8 @@ public class StarsMain {
 		Scanner file = null;
 		try {
 			file = new Scanner(new File(args[0]), "UTF-8");
-//			file = new Scanner(new File("data/startest.csv"), "UTF-8"); // for debugging
+			// file = new Scanner(new File("data/startest.csv"), "UTF-8"); //
+			// for debugging
 
 			// while there is still more to read in the file
 			file.nextLine(); // move scanner past first line
@@ -66,7 +68,7 @@ public class StarsMain {
 	}
 
 	public static void runStars(List<Star> stars) {
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 		new StarsConsole(st);
 	}
 

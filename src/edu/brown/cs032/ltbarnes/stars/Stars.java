@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
-import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
 public class Stars {
 
-	private StarTree tree_;
+	private KDTree<Star> tree_;
 
-	public Stars(StarTree tree) {
+	public Stars(KDTree<Star> tree) {
 		this.tree_ = tree;
 	}
 
@@ -98,7 +98,7 @@ public class Stars {
 		public Command(boolean radiusCmd, int n, double x, double y, double z) {
 			this.radiusCmd = radiusCmd;
 			this.n = n;
-			this.star = new Star("","",x, y, z);
+			this.star = new Star("", "", x, y, z);
 		}
 
 		public Command(boolean radiusCmd, int n, Star star) {
