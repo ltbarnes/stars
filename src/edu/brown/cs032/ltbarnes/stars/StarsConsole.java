@@ -1,19 +1,20 @@
 package edu.brown.cs032.ltbarnes.stars;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.brown.cs032.ltbarnes.stars.Stars.Command;
 import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
 public class StarsConsole {
 
+	public static final String CMD_ERR = "ERROR: usage: \n\t\t blah";
 	private Stars stars_;
 
 	public StarsConsole(StarTree tree) {
 		stars_ = new Stars(tree);
-
-		System.out.println("Ready");
 
 		startReadWriteLoop();
 	}
@@ -28,20 +29,21 @@ public class StarsConsole {
 		// while EOF hasn't occurred
 		while (keyboard.hasNextLine()) {
 			// get user input
-			String next = keyboard.nextLine();
+			String line = keyboard.nextLine();
+			List<String> words = Arrays.asList(line.split("\\s+"));
 
 			// return on blank line
-			if (next.length() == 0)
+			if (words.size() == 0 || line.length() == 0)
 				break;
 
 			// clean and separate input if valid
-			List<String> line;
-			if ((line = stars_.parseInput(next)) == null) {
-				System.err.println("Error invalid input");
+			Command cmd;
+			if ((cmd = stars_.parseInput(words)) == null) {
+//				System.err.println(CMD_ERR);
 				continue;
 			}
 
-			stars_.executeCommand(line);
+			stars_.executeCommand(cmd);
 
 			// print out the list of corrections and a blank line after
 			// for (String str : toPrint)

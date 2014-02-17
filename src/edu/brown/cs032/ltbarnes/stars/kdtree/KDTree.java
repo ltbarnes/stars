@@ -2,7 +2,9 @@ package edu.brown.cs032.ltbarnes.stars.kdtree;
 
 import java.util.List;
 
-public interface KDTree<T extends Graphable> {
+import edu.brown.cs032.ltbarnes.stars.startree.Star;
+
+public interface KDTree<T extends Graphable> extends Iterable<Star> {
 
 	/**
 	 * Adds an element to the tree.

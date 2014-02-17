@@ -67,7 +67,6 @@ public class StarsMain {
 
 	public static void runStars(List<Star> stars) {
 		StarTree st = new StarTree(stars);
-		System.out.println("Ready");
 		new StarsConsole(st);
 	}
 
