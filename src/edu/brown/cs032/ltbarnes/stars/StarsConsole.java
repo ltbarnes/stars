@@ -42,12 +42,9 @@ public class StarsConsole {
 				continue;
 			}
 
-			stars_.executeCommand(cmd);
+			List<Star> stars = stars_.executeCommand(cmd);
 
-			// print out the list of corrections and a blank line after
-			// for (String str : toPrint)
-			// System.out.println(str);
-			// System.out.println();
+			stars_.printStars(stars);
 		}
 		keyboard.close();
 	}

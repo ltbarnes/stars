@@ -84,10 +84,17 @@ public class Stars {
 	public List<Star> executeCommand(Command cmd) {
 		List<Star> stars;
 		if (cmd.radiusCmd)
-			stars = tree_.kNNSearch(cmd.star, cmd.n);
-		else
 			stars = tree_.kNNSearchWithRadius(cmd.star, cmd.n);
+		else
+			stars = tree_.kNNSearch(cmd.star, cmd.n);
 		return stars;
+	}
+
+	public void printStars(List<Star> stars) {
+		System.out.println();
+		for (Star star : stars)
+			System.out.println(star.value);
+		System.out.println();
 	}
 
 	public static class Command {
