@@ -142,7 +142,7 @@ public class StarTreeTest {
 			assertEquals(stars.get(i), s);
 			i++;
 		}
-		// assertEquals(i, st.size());
+		 assertEquals(i, st.size());
 
 		stars.clear();
 		stars.add(new Star("0", "", -11, -5, -2));
