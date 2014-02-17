@@ -5,9 +5,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.junit.Test;
 
@@ -26,6 +24,7 @@ public class StarTreeTest {
 		StarTree st = new StarTree(stars);
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:null)))", st.toString());
+		assertEquals(7, st.size());
 
 		stars.clear();
 		stars.add(new Star("0", "", -3, -1, 0));
@@ -38,6 +37,7 @@ public class StarTreeTest {
 		st = new StarTree(stars);
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:null)))", st.toString());
+		assertEquals(7, st.size());
 
 		stars.clear();
 		stars.add(new Star("0", "", -11, -5, -2));
@@ -68,6 +68,7 @@ public class StarTreeTest {
 				+ " R:(8: L:(7: L:(6: L:null R:null) R:null) R:(10: L:(9: L:null R:null) R:null))) "
 				+ "R:(17: L:(14: L:(13: L:(12: L:null R:null) R:null) R:(16: L:(15: L:null R:null) R:null))"
 				+ " R:(20: L:(19: L:(18: L:null R:null) R:null) R:(22: L:(21: L:null R:null) R:null))))", st.toString());
+		assertEquals(23, st.size());
 
 		stars.clear();
 		stars.add(new Star("0", "", 0, 0, 0));
@@ -83,6 +84,7 @@ public class StarTreeTest {
 		st = new StarTree(stars);
 		assertEquals("(9: L:(4: L:(0: L:(2: L:null R:null) R:null) R:(7: L:(6: L:null R:null) "
 				+ "R:null)) R:(5: L:(3: L:(1: L:null R:null) R:null) R:(8: L:null R:null)))", st.toString());
+		assertEquals(10, st.size());
 	}
 
 	@Test
@@ -96,13 +98,72 @@ public class StarTreeTest {
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
 		StarTree st = new StarTree(stars);
+		assertEquals(7, st.size());
+
 		st.addElement(new Star("7", "", 3, 1, 1));
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:(7: L:null R:null))))", st.toString());
+		assertEquals(8, st.size());
+
 		st.addElement(new Star("8", "", -7, 4, -1));
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:(8: L:null R:null) R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:(7: L:null R:null))))", st.toString());
+		assertEquals(9, st.size());
 
+	}
+
+	@Test
+	public void testIterator() {
+		List<Star> stars = new ArrayList<>();
+		stars.add(new Star("0", "", -3, -1, 0));
+		stars.add(new Star("1", "", -2, 0, 0));
+		stars.add(new Star("2", "", -1, 1, 0));
+		stars.add(new Star("3", "", 0, 0, 0));
+		stars.add(new Star("4", "", 1, -1, 0));
+		stars.add(new Star("5", "", 2, 0, 0));
+		stars.add(new Star("6", "", 3, 1, 0));
+
+		StarTree st = new StarTree(stars);
+
+		int i = 0;
+		for (Star s : st) {
+			assertEquals(stars.get(i), s);
+			i++;
+		}
+		assertEquals(i, st.size());
+
+		stars.clear();
+		stars.add(new Star("0", "", -11, -5, -2));
+		stars.add(new Star("1", "", -10, -4, -1));
+		stars.add(new Star("2", "", -9, -3, 0));
+		stars.add(new Star("3", "", -8, -2, 1));
+		stars.add(new Star("4", "", -7, -1, 2));
+		stars.add(new Star("5", "", -6, 0, 0));
+		stars.add(new Star("6", "", -5, 1, -2));
+		stars.add(new Star("7", "", -4, 2, -1));
+		stars.add(new Star("8", "", -3, 3, 0));
+		stars.add(new Star("9", "", -2, 4, 1));
+		stars.add(new Star("10", "", -1, 5, 2));
+		stars.add(new Star("11", "", 0, 0, 0));
+		stars.add(new Star("12", "", 1, -5, -2));
+		stars.add(new Star("13", "", 2, -4, -1));
+		stars.add(new Star("14", "", 3, -3, 0));
+		stars.add(new Star("15", "", 4, -2, 1));
+		stars.add(new Star("16", "", 5, -1, 2));
+		stars.add(new Star("17", "", 6, 0, 0));
+		stars.add(new Star("18", "", 7, 1, -2));
+		stars.add(new Star("19", "", 8, 2, -1));
+		stars.add(new Star("20", "", 9, 3, 0));
+		stars.add(new Star("21", "", -10, 4, 1));
+		stars.add(new Star("22", "", -11, 5, 2));
+		st = new StarTree(stars);
+
+		i = 0;
+		for (Star s : st) {
+			assertEquals(stars.get(i), s);
+			i++;
+		}
+		assertEquals(i, st.size());
 	}
 
 	@Test
@@ -116,17 +177,17 @@ public class StarTreeTest {
 	@Test
 	public void testDist2Plane() {
 		StarNode star = new StarNode(new Star("", "", 1, 1, 1));
-		StarNode current = new StarNode(new Star("", "", 0, -4, 7),0);
+		StarNode current = new StarNode(new Star("", "", 0, -4, 7), 0);
 		int dim = current.getDepth() % 3;
 		assertEquals(0, dim);
 		Star s = star.getStar();
 		Double[] coords = new Double[3];
 		s.coordinates.toArray(coords);
 		coords[dim] = current.getDimension(dim);
-		Double[] correct = {0.0, 1.0, 1.0};
+		Double[] correct = { 0.0, 1.0, 1.0 };
 		assertArrayEquals(correct, coords);
 		assertEquals(1, StarTree.starDist2(new Star("", "", coords[0], coords[1], coords[2]), s), 1e-12);
-		
+
 	}
 
 	@Test
@@ -144,7 +205,7 @@ public class StarTreeTest {
 
 		assertEquals("(11: L:(00: L:null R:null) R:(22: L:null R:null))", st.toString());
 
-		Set<Star> starSet = new HashSet<>();
+		List<Star> starSet = new ArrayList<>();
 		starSet.add(s11);
 		assertEquals(starSet, st.kNNSearch(new Star("", "", 0, 0, 1), 1));
 		starSet.clear();
@@ -234,23 +295,35 @@ public class StarTreeTest {
 
 		StarTree st = new StarTree(stars);
 
-		Set<Star> starSet = new HashSet<>();
-		addStarsToSet(starSet, s8, s7, s6);
+		List<Star> starSet = new ArrayList<>();
+		addStarsToSet(starSet, s8, s7, s9);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", 3, 0, 2), 3));
 		starSet.clear();
 		addStarsToSet(starSet, s6, s7, s5, s8);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, 5, -1), 4));
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, -5, -1), 4));
 		starSet.clear();
-		addStarsToSet(starSet, s5, s6, s4, s3, s7);
+		addStarsToSet(starSet, s4, s9, s10, s3, s5);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, 5, -1), 5));
+		starSet.clear();
+		addStarsToSet(starSet, s5, s3, s4, s6, s7);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 5));
 		starSet.clear();
-		addStarsToSet(starSet, s5, s6, s3, s2, s7, s4);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, 1, 0), 6));
+		addStarsToSet(starSet, s5, s3, s4, s6, s7, s2, s8);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 7));
 		starSet.clear();
-		addStarsToSet(starSet, s8, s9, s7, s6, s10);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 4, 2, 1), 5));
+		addStarsToSet(starSet, s5, s3, s4, s6, s7, s2, s8, s1, s9);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 9));
 		starSet.clear();
-		addStarsToSet(starSet, s0, s10, s8, s7, s6, s5);
+		addStarsToSet(starSet, s5, s2, s3, s6, s1, s4);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 6));
+		starSet.clear();
+		addStarsToSet(starSet, s5, s2, s3, s6, s1, s4, s7);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 7));
+		starSet.clear();
+		addStarsToSet(starSet, s7, s8, s6, s9, s10);
+		assertEquals(starSet, st.kNNSearch(new Star("11", "", 4, -2, 1), 5));
+		starSet.clear();
+		addStarsToSet(starSet, s9, s8, s10, s7, s6, s5);
 		assertEquals(starSet, st.kNNSearch(new Star("11", "", 5, 0, 0), 6));
 		starSet.clear();
 		addStarsToSet(starSet, s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10);

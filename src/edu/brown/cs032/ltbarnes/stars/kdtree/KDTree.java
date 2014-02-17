@@ -1,6 +1,6 @@
 package edu.brown.cs032.ltbarnes.stars.kdtree;
 
-import java.util.Set;
+import java.util.List;
 
 public interface KDTree<T extends Graphable> {
 
@@ -13,8 +13,8 @@ public interface KDTree<T extends Graphable> {
 
 	public boolean removeElement(T e);
 
-	public Set<? extends KDElement> kNNSearch(T e, int numNearest);
+	public List<? extends KDElement> kNNSearch(T e, int numNearest);
 
-	public Set<? extends KDElement> kNNSearchWithRadius(T e, int radius);
+	public List<? extends KDElement> kNNSearchWithRadius(T e, int radius);
 
 }
