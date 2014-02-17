@@ -2,6 +2,7 @@ package edu.brown.cs032.ltbarnes.stars.startree;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -9,7 +10,16 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.brown.cs032.ltbarnes.stars.StarsMain;
+
 public class StarTreeTest {
+	
+	@Test
+	public void testStarsEqual() {
+		assertTrue(new Star("0", "", -5, -2, 0).equals(new Star("0", "", -5, -2, 0)));
+		assertEquals(new Star("0", "", -5, -2, 0), new Star("0", "", -5, -2, 0));
+		assertEquals(new StarNode(new Star("1823", "Blah", 2, 1, 2)), new StarNode(new Star("1823", "Blah", 2, 1, 2)));
+	}
 
 	@Test
 	public void testBuildTree() {
@@ -205,12 +215,12 @@ public class StarTreeTest {
 
 		assertEquals("(11: L:(00: L:null R:null) R:(22: L:null R:null))", st.toString());
 
-		List<Star> starSet = new ArrayList<>();
-		starSet.add(s11);
-		assertEquals(starSet, st.kNNSearch(new Star("", "", 0, 0, 1), 1));
-		starSet.clear();
-		starSet.add(s22);
-		assertEquals(starSet, st.kNNSearch(new Star("", "", 3, 0, 2), 1));
+		List<Star> starList = new ArrayList<>();
+		starList.add(s11);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 0, 0, 1), 1));
+		starList.clear();
+		starList.add(s22);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 3, 0, 2), 1));
 
 		stars.clear();
 		Star s0 = new Star("0", "", -5, -2, 0);
@@ -239,30 +249,30 @@ public class StarTreeTest {
 
 		st = new StarTree(stars);
 
-		starSet.clear();
-		starSet.add(s8);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 3, 0, 2), 1));
-		starSet.clear();
-		starSet.add(s6);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, -5, -1), 1));
-		starSet.clear();
-		starSet.add(s4);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, 5, -1), 1));
-		starSet.clear();
-		starSet.add(s5);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 1));
-		starSet.clear();
-		starSet.add(s5);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 1));
-		starSet.clear();
-		starSet.add(s7);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 4, -2, 1), 1));
-		starSet.clear();
-		starSet.add(s9);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 5, 0, 0), 1));
-		starSet.clear();
-		starSet.add(s0);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -80, 0, 0), 1));
+		starList.clear();
+		starList.add(s8);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 3, 0, 2), 1));
+		starList.clear();
+		starList.add(s6);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 1, -5, -1), 1));
+		starList.clear();
+		starList.add(s4);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 1, 5, -1), 1));
+		starList.clear();
+		starList.add(s5);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 0, 0, -7), 1));
+		starList.clear();
+		starList.add(s5);
+		assertEquals(starList, st.kNNSearch(new Star("", "", -1, -1, 0), 1));
+		starList.clear();
+		starList.add(s7);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 4, -2, 1), 1));
+		starList.clear();
+		starList.add(s9);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 5, 0, 0), 1));
+		starList.clear();
+		starList.add(s0);
+		assertEquals(starList, st.kNNSearch(new Star("", "", -80, 0, 0), 1));
 
 	}
 
@@ -295,40 +305,155 @@ public class StarTreeTest {
 
 		StarTree st = new StarTree(stars);
 
-		List<Star> starSet = new ArrayList<>();
-		addStarsToSet(starSet, s8, s7, s9);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 3, 0, 2), 3));
-		starSet.clear();
-		addStarsToSet(starSet, s6, s7, s5, s8);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, -5, -1), 4));
-		starSet.clear();
-		addStarsToSet(starSet, s4, s9, s10, s3, s5);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 1, 5, -1), 5));
-		starSet.clear();
-		addStarsToSet(starSet, s5, s3, s4, s6, s7);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 5));
-		starSet.clear();
-		addStarsToSet(starSet, s5, s3, s4, s6, s7, s2, s8);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 7));
-		starSet.clear();
-		addStarsToSet(starSet, s5, s3, s4, s6, s7, s2, s8, s1, s9);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 0, 0, -7), 9));
-		starSet.clear();
-		addStarsToSet(starSet, s5, s2, s3, s6, s1, s4);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 6));
-		starSet.clear();
-		addStarsToSet(starSet, s5, s2, s3, s6, s1, s4, s7);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -1, -1, 0), 7));
-		starSet.clear();
-		addStarsToSet(starSet, s7, s8, s6, s9, s10);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 4, -2, 1), 5));
-		starSet.clear();
-		addStarsToSet(starSet, s9, s8, s10, s7, s6, s5);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", 5, 0, 0), 6));
-		starSet.clear();
-		addStarsToSet(starSet, s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10);
-		assertEquals(starSet, st.kNNSearch(new Star("11", "", -80, 0, 0), 11));
+		List<Star> starList = new ArrayList<>();
+		addStarsToSet(starList, s8, s7, s9);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 3, 0, 2), 3));
+		starList.clear();
+		addStarsToSet(starList, s6, s7, s5, s8);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 1, -5, -1), 4));
+		starList.clear();
+		addStarsToSet(starList, s4, s9, s10, s3, s5);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 1, 5, -1), 5));
+		starList.clear();
+		addStarsToSet(starList, s5, s3, s4, s6, s7);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 0, 0, -7), 5));
+		starList.clear();
+		addStarsToSet(starList, s5, s3, s4, s6, s7, s2, s8);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 0, 0, -7), 7));
+		starList.clear();
+		addStarsToSet(starList, s5, s3, s4, s6, s7, s2, s8, s1, s9);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 0, 0, -7), 9));
+		starList.clear();
+		addStarsToSet(starList, s5, s2, s3, s6, s1, s4);
+		assertEquals(starList, st.kNNSearch(new Star("", "", -1, -1, 0), 6));
+		starList.clear();
+		addStarsToSet(starList, s5, s2, s3, s6, s1, s4, s7);
+		assertEquals(starList, st.kNNSearch(new Star("", "", -1, -1, 0), 7));
+		starList.clear();
+		addStarsToSet(starList, s7, s8, s6, s9, s10);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 4, -2, 1), 5));
+		starList.clear();
+		addStarsToSet(starList, s9, s8, s10, s7, s6, s5);
+		assertEquals(starList, st.kNNSearch(new Star("", "", 5, 0, 0), 6));
+		starList.clear();
+		addStarsToSet(starList, s0, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10);
+		assertEquals(starList, st.kNNSearch(new Star("", "", -80, 0, 0), 11));
+	}
 
+	@Test
+	public void testFindNearestMultipleWithStars() {
+		List<Star> stars = new ArrayList<>();
+		Star s0 = new Star("0", "", -5, -2, 0);
+		Star s1 = new Star("1", "", -4, -1, 0);
+		Star s2 = new Star("2", "", -3, 0, 0);
+		Star s3 = new Star("3", "", -2, 1, 0);
+		Star s4 = new Star("4", "", -1, 2, 0);
+		Star s5 = new Star("5", "", 0, 0, 0);
+		Star s6 = new Star("6", "", 1, -2, 0);
+		Star s7 = new Star("7", "", 2, -1, 0);
+		Star s8 = new Star("8", "", 3, 0, 0);
+		Star s9 = new Star("9", "", 4, 1, 0);
+		Star s10 = new Star("10", "", 5, 2, 0);
+
+		stars.add(s0);
+		stars.add(s1);
+		stars.add(s2);
+		stars.add(s3);
+		stars.add(s4);
+		stars.add(s5);
+		stars.add(s6);
+		stars.add(s7);
+		stars.add(s8);
+		stars.add(s9);
+		stars.add(s10);
+
+		StarTree st = new StarTree(stars);
+
+		List<Star> starList = new ArrayList<>();
+		addStarsToSet(starList, s1, s2, s3, s5, s4);
+		assertEquals(starList, st.kNNSearch(new Star("0", "", -5, -2, 0), 5));
+		starList.clear();
+		addStarsToSet(starList, s4, s2, s5, s1);
+		assertEquals(starList, st.kNNSearch(new Star("3", "", -2, 1, 0), 4));
+		starList.clear();
+		addStarsToSet(starList, s3);
+		assertEquals(starList, st.kNNSearch(new Star("5", "", 0, 0, 0), 1));
+		starList.clear();
+		addStarsToSet(starList, s7, s9, s6);
+		assertEquals(starList, st.kNNSearch(new Star("8", "", 3, 0, 0), 3));
+		starList.clear();
+		addStarsToSet(starList, s10, s8, s7, s5, s6, s4, s3, s2, s1, s0);
+		assertEquals(starList, st.kNNSearch(new Star("9", "", 4, 1, 0), 100));
+	}
+
+	@Test
+	public void testFindNearestWithRadius() {
+		List<Star> stars;
+		String[] args = { "data/startest.csv" };
+		if ((stars = StarsMain.parseInput(args)) == null)
+			return;
+
+		StarTree st = new StarTree(stars);
+
+		Star s0 = new Star("0", "Sol", 0, 0, 0);
+		Star s1 = new Star("1", "", 282.43485, 0.00449, 5.36884);
+		Star s2 = new Star("2", "", 43.04329, 0.00285, -15.24144);
+		Star s3 = new Star("3", "", 277.11358, 0.02422, 223.27753);
+		Star s4 = new Star("4", "", 79.62896, 0.01164, -101.53103);
+		Star s5 = new Star("5", "", 264.58918, 0.04601, -226.71007);
+		Star s6 = new Star("6", "", 53.06535, 0.0168, 3.66089);
+		Star s7 = new Star("7", "", 52.95794, 0.02084, 19.31343);
+		Star s8 = new Star("8", "", 174.01562, 0.08288, 84.44669);
+		Star s9 = new Star("9", "", 166.9363, 0.10297, 123.9143);
+
+		List<Star> starList = new ArrayList<>();
+		addStarsToSet(starList, s0, s2, s6, s7);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", -1, -1, -1), 60));
+		starList.clear();
+		addStarsToSet(starList, s0, s2, s6, s7);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 0, 0, 0), 60));
+		starList.clear();
+		addStarsToSet(starList, s7, s6, s2, s0);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 52.95794, 0.02084, 19.31343), 100));
+		starList.clear();
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 1, -5, -1), 5));
+		starList.clear();
+		addStarsToSet(starList, s2, s6, s7, s0);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 1, -5, -1), 55));
+		starList.clear();
+		addStarsToSet(starList, s2, s6, s7, s0, s4, s8);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 1, -5, -1), 175));
+		starList.clear();
+		addStarsToSet(starList, s2, s6, s7, s0, s4, s8, s9, s1);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 1, -5, -1), 300));
+		starList.clear();
+		addStarsToSet(starList, s2, s6, s7, s0, s4, s8, s9, s1, s5, s3);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 1, -5, -1), 350));
+		starList.clear();
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 50));
+		starList.clear();
+		addStarsToSet(starList, s5);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 100));
+		starList.clear();
+		addStarsToSet(starList, s5);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 200));
+		starList.clear();
+		addStarsToSet(starList, s5, s4);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 300));
+		starList.clear();
+		addStarsToSet(starList, s5, s4, s1, s2, s6);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 400));
+		starList.clear();
+		addStarsToSet(starList, s5, s4, s1, s2, s6, s7, s8, s0, s9);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 500));
+		starList.clear();
+		addStarsToSet(starList, s5, s4, s1, s2, s6, s7, s8, s0, s9, s3);
+		assertEquals(starList, st.kNNSearchWithRadius(new Star("", "", 300, 0, -300), 550));
+	}
+
+	@Test
+	public void testFindNearestWithRadiusWithStars() {
+		// TODO: test kNNSearchWithRadius with actual stars from the tree
 	}
 
 	public static void addStarsToSet(Collection<Star> c, Star... strs) {

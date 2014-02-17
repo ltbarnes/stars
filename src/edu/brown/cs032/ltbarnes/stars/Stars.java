@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
+import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
 public class Stars {
 
-	private KDTree<Star> tree_;
+	private StarTree tree_;
 
-	public Stars(KDTree<Star> tree) {
+	public Stars(StarTree tree) {
 		this.tree_ = tree;
 	}
 
@@ -21,13 +21,13 @@ public class Stars {
 		int quote1, quote2;
 		if ((quote1 = line.indexOf('\"')) >= 0) {
 			String beginning = line.substring(0, quote1);
-			words = new ArrayList<String>(Arrays.asList(beginning.split("\\s+")));
+			words = new ArrayList<>(Arrays.asList(beginning.split("\\s+")));
 			if ((quote2 = line.indexOf('\"', quote1 + 1)) >= 0) {
 				name = line.substring(quote1 + 1, quote2);
 				words.add(name);
 			}
 		} else {
-			words = new ArrayList<String>(Arrays.asList(line.split("\\s+")));
+			words = new ArrayList<>(Arrays.asList(line.split("\\s+")));
 		}
 		if (words.size() > 0 && words.get(0).length() == 0)
 			words.remove(0);
@@ -81,32 +81,30 @@ public class Stars {
 		return cmd;
 	}
 
-	public boolean executeCommand(Command cmd) {
-		// tree_.kNNSearch(null, 1);
-		return false;
+	public List<Star> executeCommand(Command cmd) {
+		List<Star> stars;
+		if (cmd.radiusCmd)
+			stars = tree_.kNNSearch(cmd.star, cmd.n);
+		else
+			stars = tree_.kNNSearchWithRadius(cmd.star, cmd.n);
+		return stars;
 	}
 
 	public static class Command {
-		public final boolean radiusCmd, isStar;
+		public final boolean radiusCmd;
 		public final int n;
-		public final double x, y, z;
+		public final Star star;
 
 		public Command(boolean radiusCmd, int n, double x, double y, double z) {
 			this.radiusCmd = radiusCmd;
 			this.n = n;
-			this.x = x;
-			this.y = y;
-			this.z = z;
-			isStar = false;
+			this.star = new Star("","",x, y, z);
 		}
 
 		public Command(boolean radiusCmd, int n, Star star) {
 			this.radiusCmd = radiusCmd;
 			this.n = n;
-			this.x = star.coordinates.get(0);
-			this.y = star.coordinates.get(1);
-			this.z = star.coordinates.get(2);
-			isStar = true;
+			this.star = star;
 		}
 	}
 

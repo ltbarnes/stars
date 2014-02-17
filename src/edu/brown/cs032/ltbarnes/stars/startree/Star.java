@@ -10,17 +10,18 @@ public class Star extends KDElement {
 		super(id, x, y, z);
 		this.name = name;
 	}
-	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
 		if (!(o instanceof Star))
 			return false;
-		
+
 		Star s = (Star) o;
-		return s.value.equals(value) && s.name.equals(name) && s.coordinates.get(0) == coordinates.get(0) &&
-				s.coordinates.get(1) == coordinates.get(1) && s.coordinates.get(2) == coordinates.get(2);
+		return ((String) s.value).equals((String) value) && s.name.equals(name)
+				&& s.coordinates.get(0).equals(coordinates.get(0)) && s.coordinates.get(1).equals(coordinates.get(1))
+				&& s.coordinates.get(2).equals(coordinates.get(2));
 	}
 
 	@Override

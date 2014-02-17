@@ -95,13 +95,15 @@ public class StarTree extends AbstractCollection<Star> implements KDTree<Star> {
 
 		// base case leaf node
 		if (leftChild == null && rightChild == null) {
-			if (list.size() < numNearest) {
-				list.add(new StarEval<StarNode, Double>(current, currDist));
-			} else {
-				Collections.sort(list, new StarEvalComparator());
-				if (currDist < list.get(numNearest - 1).minDist) {
-					list.remove(numNearest - 1);
+			if (!current.getStar().equals(star.getStar())) {
+				if (list.size() < numNearest) {
 					list.add(new StarEval<StarNode, Double>(current, currDist));
+				} else {
+					Collections.sort(list, new StarEvalComparator());
+					if (currDist < list.get(numNearest - 1).minDist) {
+						list.remove(numNearest - 1);
+						list.add(new StarEval<StarNode, Double>(current, currDist));
+					}
 				}
 			}
 			return;
@@ -120,13 +122,15 @@ public class StarTree extends AbstractCollection<Star> implements KDTree<Star> {
 			otherChild = leftChild;
 		}
 
-		if (list.size() < numNearest) {
-			list.add(new StarEval<StarNode, Double>(current, currDist));
-		} else {
-			Collections.sort(list, new StarEvalComparator());
-			if (currDist < list.get(numNearest - 1).minDist) {
-				list.remove(numNearest - 1);
+		if (!current.getStar().equals(star.getStar())) {
+			if (list.size() < numNearest) {
 				list.add(new StarEval<StarNode, Double>(current, currDist));
+			} else {
+				Collections.sort(list, new StarEvalComparator());
+				if (currDist < list.get(numNearest - 1).minDist) {
+					list.remove(numNearest - 1);
+					list.add(new StarEval<StarNode, Double>(current, currDist));
+				}
 			}
 		}
 		double maxDist = list.get(list.size() - 1).minDist;
