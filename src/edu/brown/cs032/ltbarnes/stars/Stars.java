@@ -30,12 +30,12 @@ public class Stars {
 				starName = starName.substring(1, starName.length() - 1);
 				Star s = null;
 				for (Star star : tree_)
-					if (star.name.equals(words.get(2))) {
+					if (star.name.equals(starName)) {
 						s = star;
 						break;
 					}
 				if (s == null)
-					System.out.println("ERROR: Star '" + words.get(2) + "' not found (case sensitive)");
+					System.out.println("ERROR: Star " + words.get(2) + " not found (case sensitive)");
 				else
 					cmd = new Command(words.get(0).equals("radius"), n, s);
 			} catch (NumberFormatException nfe) {
