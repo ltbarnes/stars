@@ -22,6 +22,12 @@ public class Stars {
 		if (words.size() == 3) {
 			try {
 				int n = Integer.parseInt(words.get(1));
+				String starName = words.get(2);
+				if (starName.charAt(0) != '\"' || starName.charAt(starName.length() - 1) != '\"') {
+					System.err.println("ERROR: Quotes problem");
+					return null;
+				}
+				starName = starName.substring(1, starName.length() - 1);
 				Star s = null;
 				for (Star star : tree_)
 					if (star.name.equals(words.get(2))) {
