@@ -13,7 +13,7 @@ class StarNode extends KDNode<Star> {
 	}
 
 	public Star getStar() {
-		return (Star) super.getElement();
+		return super.getElement();
 	}
 
 }
