@@ -80,8 +80,10 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 
 	@Override
 	public List<T> kNNSearch(T s, int numNearest) {
+		if (numNearest == 0)
+			return new ArrayList<T>();
 		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
-		search(list, root_, new KDNode<>(s), numNearest, dimension_);
+		search(list, root_, new KDNode<>(s), numNearest, dimension_, null);
 		Collections.sort(list, new KDEvalComparator());
 		List<T> result = new ArrayList<>();
 		for (KDEval<KDNode<T>, Double> se : list)
@@ -90,7 +92,7 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest,
-			int treeDim) {
+			int treeDim, Integer radius) {
 		KDNode<T> leftChild = current.getLeftChild();
 		KDNode<T> rightChild = current.getRightChild();
 		double currDist = starDist2(current.getElement(), star.getElement());
@@ -98,13 +100,17 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		// base case leaf node
 		if (leftChild == null && rightChild == null) {
 			if (!current.getElement().equals(star.getElement())) {
-				if (list.size() < numNearest) {
+				if (radius != null && currDist <= radius)
 					list.add(new KDEval<KDNode<T>, Double>(current, currDist));
-				} else {
-					Collections.sort(list, new KDEvalComparator());
-					if (currDist < list.get(numNearest - 1).minDist) {
-						list.remove(numNearest - 1);
+				else if (radius == null) {
+					if (list.size() < numNearest) {
 						list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+					} else {
+						Collections.sort(list, new KDEvalComparator());
+						if (currDist < list.get(numNearest - 1).minDist) {
+							list.remove(numNearest - 1);
+							list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+						}
 					}
 				}
 			}
@@ -115,27 +121,35 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		KDNode<T> otherChild;
 
 		if (star.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
-			search(list, leftChild, star, numNearest, treeDim);
+			search(list, leftChild, star, numNearest, treeDim, radius);
 			otherChild = rightChild;
 		} else if (rightChild != null) {
-			search(list, rightChild, star, numNearest, treeDim);
+			search(list, rightChild, star, numNearest, treeDim, radius);
 			otherChild = leftChild;
 		} else {
 			otherChild = leftChild;
 		}
 
 		if (!current.getElement().equals(star.getElement())) {
-			if (list.size() < numNearest) {
+			if (radius != null && currDist <= radius)
 				list.add(new KDEval<KDNode<T>, Double>(current, currDist));
-			} else {
-				Collections.sort(list, new KDEvalComparator());
-				if (currDist < list.get(numNearest - 1).minDist) {
-					list.remove(numNearest - 1);
+			else if (radius == null) {
+				if (list.size() < numNearest) {
 					list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+				} else {
+					Collections.sort(list, new KDEvalComparator());
+					if (currDist < list.get(numNearest - 1).minDist) {
+						list.remove(numNearest - 1);
+						list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+					}
 				}
 			}
 		}
-		double maxDist = list.get(list.size() - 1).minDist;
+		double maxDist;
+		if (list.isEmpty())
+			maxDist = Double.MAX_VALUE;
+		else 
+			maxDist = list.get(list.size() - 1).minDist;
 
 		KDElement s = star.getElement();
 		Double[] coords = new Double[3];
@@ -143,14 +157,21 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		coords[dim] = current.getDimension(dim);
 		double distPlane = starDist2(new Star("", "", coords[0], coords[1], coords[2]), s);
 
-		if ((list.size() < numNearest || distPlane < maxDist) && otherChild != null) {
-			search(list, otherChild, star, numNearest, treeDim);
+		if ((radius != null && distPlane <= radius && otherChild != null)
+				|| (radius == null && (list.size() < numNearest || distPlane < maxDist) && otherChild != null)) {
+			search(list, otherChild, star, numNearest, treeDim, radius);
 		}
 	}
 
 	@Override
-	public List<T> kNNSearchWithRadius(KDElement s, int radius) {
-		return null;
+	public List<T> kNNSearchWithRadius(T s, int radius) {
+		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
+		search(list, root_, new KDNode<>(s), 1, dimension_, new Integer(radius * radius));
+		Collections.sort(list, new KDEvalComparator());
+		List<T> result = new ArrayList<>();
+		for (KDEval<KDNode<T>, Double> se : list)
+			result.add(se.node.getElement());
+		return result;
 	}
 
 	@Override
