@@ -1,5 +1,6 @@
 package edu.brown.cs032.ltbarnes.stars;
 
+import java.util.Arrays;
 import java.util.List;
 
 import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
@@ -12,8 +13,17 @@ public class Stars {
 	public Stars(KDTree<Star> tree) {
 		this.tree_ = tree;
 	}
+	
+	public List<String> parseInput(String line) {
+		int firstQuote = line.indexOf('\"');
+		String beginning = line.substring(0, firstQuote);
+		List<String> words = Arrays.asList(beginning.split("\\s+"));
+		String star = line.substring(firstQuote + 1, line.indexOf('\"', firstQuote + 1));
+		words.add(star);
+		return words;
+	}
 
-	public Command parseInput(List<String> words) {
+	public Command checkInput(List<String> words) {
 		if (!words.get(0).equals("neighbors") && !words.get(0).equals("radius")) {
 			System.err.println(StarsConsole.CMD_ERR);
 			return null;
@@ -23,11 +33,6 @@ public class Stars {
 			try {
 				int n = Integer.parseInt(words.get(1));
 				String starName = words.get(2);
-				if (starName.charAt(0) != '\"' || starName.charAt(starName.length() - 1) != '\"') {
-					System.err.println("ERROR: Quotes problem");
-					return null;
-				}
-				starName = starName.substring(1, starName.length() - 1);
 				Star s = null;
 				for (Star star : tree_)
 					if (star.name.equals(starName)) {

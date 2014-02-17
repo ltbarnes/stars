@@ -1,6 +1,5 @@
 package edu.brown.cs032.ltbarnes.stars;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,7 +29,7 @@ public class StarsConsole {
 		while (keyboard.hasNextLine()) {
 			// get user input
 			String line = keyboard.nextLine();
-			List<String> words = Arrays.asList(line.split("\\s+"));
+			List<String> words = stars_.parseInput(line);
 
 			// return on blank line
 			if (words.size() == 0 || line.length() == 0)
@@ -38,8 +37,8 @@ public class StarsConsole {
 
 			// clean and separate input if valid
 			Command cmd;
-			if ((cmd = stars_.parseInput(words)) == null) {
-//				System.err.println(CMD_ERR);
+			if ((cmd = stars_.checkInput(words)) == null) {
+				// System.err.println(CMD_ERR);
 				continue;
 			}
 
