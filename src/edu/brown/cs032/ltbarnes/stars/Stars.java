@@ -1,5 +1,6 @@
 package edu.brown.cs032.ltbarnes.stars;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,13 +14,25 @@ public class Stars {
 	public Stars(KDTree<Star> tree) {
 		this.tree_ = tree;
 	}
-	
+
 	public List<String> parseInput(String line) {
-		int firstQuote = line.indexOf('\"');
-		String beginning = line.substring(0, firstQuote);
-		List<String> words = Arrays.asList(beginning.split("\\s+"));
-		String star = line.substring(firstQuote + 1, line.indexOf('\"', firstQuote + 1));
-		words.add(star);
+		List<String> words;
+		String name = null;;
+		int quote1, quote2;
+		if ((quote1 = line.indexOf('\"')) >= 0) {
+			String beginning = line.substring(0, quote1);
+			words = new ArrayList<String>(Arrays.asList(beginning.split("\\s+")));
+			if ((quote2 = line.indexOf('\"', quote1 + 1)) >= 0) {
+				name = line.substring(quote1 + 1, quote2);
+				words.add(name);
+			}
+		} else {
+			words = new ArrayList<String>(Arrays.asList(line.split("\\s+")));
+		}
+		if (words.size() > 0 && words.get(0).length() == 0)
+			words.remove(0);
+		if (words.size() == 3 && name == null)
+			words.remove(2);
 		return words;
 	}
 
@@ -40,7 +53,7 @@ public class Stars {
 						break;
 					}
 				if (s == null)
-					System.out.println("ERROR: Star " + words.get(2) + " not found (case sensitive)");
+					System.out.println("ERROR: Star \"" + words.get(2) + "\" not found (case sensitive)");
 				else
 					cmd = new Command(words.get(0).equals("radius"), n, s);
 			} catch (NumberFormatException nfe) {
@@ -60,6 +73,10 @@ public class Stars {
 			}
 		} else {
 			System.err.println("ERROR: Size prob: size == " + words.size());
+		}
+		if (cmd != null && cmd.n < 0) {
+			System.err.println("ERROR: The 'n' parameter cannot be negative");
+			return null;
 		}
 		return cmd;
 	}
