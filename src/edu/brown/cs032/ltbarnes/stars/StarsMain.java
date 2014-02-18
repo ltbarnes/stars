@@ -10,6 +10,14 @@ import edu.brown.cs032.ltbarnes.kdtree.GenericKDTree;
 import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
+/**
+ * The main class for the stars program containing the {@code main} method where the program starts.
+ * This class is responsible for parsing the command line arguments and beginning the read/write
+ * console loop.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class StarsMain {
 
 	public static void main(String[] args) {
@@ -19,13 +27,27 @@ public class StarsMain {
 		StarsMain.runStars(stars);
 	}
 
+	/**
+	 * Checks the input arguments and creates a list of {@link Star}s from the input file if one is
+	 * specified.
+	 * 
+	 * @param args
+	 *            - the arguments passed to the program
+	 * @return a list of {@link Star}s
+	 */
 	public static List<Star> parseInput(String[] args) {
 		if (args.length == 0) {
 			System.err.println("ERROR: No filename given\n");
 			return null;
 		}
+		// only use the first file given
 		if (args.length != 1) {
 			System.err.println("ERROR: Only using filename '" + args[0] + "'");
+		}
+		// only use .csv files
+		if (!args[0].endsWith(".csv")) {
+			System.err.println("ERROR: File must be a .csv file");
+			return null;
 		}
 
 		List<Star> stars = new ArrayList<>();
@@ -33,15 +55,18 @@ public class StarsMain {
 		try {
 			file = new Scanner(new File(args[0]), "UTF-8");
 
-			file.nextLine(); // move scanner past first line
+			// move scanner past the labels
+			file.nextLine();
 
 			// while there is still more to read in the file
 			while (file.hasNextLine()) {
-				// split star data into list
+
+				// split star data into array
 				String words[] = file.nextLine().split(",");
 				String name;
 				double x, y, z;
 
+				// read contents and add star to list
 				try {
 					name = words[1];
 					x = Double.parseDouble(words[2]);
@@ -54,7 +79,6 @@ public class StarsMain {
 					System.err.println("ERROR: can't read coordinates of star " + words[0]);
 				}
 			}
-
 		} catch (FileNotFoundException e) {
 			System.err.println("ERROR: " + args[0] + " not found\n");
 			return null;
@@ -62,10 +86,17 @@ public class StarsMain {
 			if (file != null)
 				file.close();
 		}
-
+		// return list of stars
 		return stars;
 	}
 
+	/**
+	 * Creates a {@link KDTree} from the supplied list of {@link Star}s and passes it to a
+	 * {@link StarsConsole} object to begin the read/write loop.
+	 * 
+	 * @param stars
+	 *            - the list of {@link Star} objects
+	 */
 	public static void runStars(List<Star> stars) {
 		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 		new StarsConsole(st);

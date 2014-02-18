@@ -1,7 +1,15 @@
 package edu.brown.cs032.ltbarnes.stars.engine;
 
+import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
+/**
+ * A class used for organizing the required inputs needed to execute an search through a
+ * {@link KDTree}.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class Command {
 
 	private boolean radiusCmd;
@@ -45,6 +53,12 @@ public class Command {
 		this.star = star;
 	}
 
+	/**
+	 * An {@link Exception} thrown if a negative number is used for a non-negative parameter.
+	 * 
+	 * @author ltbarnes
+	 * 
+	 */
 	public static class NegativeNumberException extends Exception {
 
 		/**
