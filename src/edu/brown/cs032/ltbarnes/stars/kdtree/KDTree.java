@@ -10,7 +10,7 @@ import java.util.List;
  * @author ltbarnes
  * 
  * @param <T>
- *            the type of {@link KDElement}s in the Tree
+ *            the type of {@link KDElement}s in the tree
  */
 public interface KDTree<T extends KDElement> extends Iterable<T>, Collection<T> {
 

@@ -1,5 +1,8 @@
 package edu.brown.cs032.ltbarnes.stars.startree;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import edu.brown.cs032.ltbarnes.stars.kdtree.KDElement;
 
 public class Star extends KDElement {
@@ -12,6 +15,11 @@ public class Star extends KDElement {
 	}
 
 	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).appendSuper(super.hashCode()).append(name).toHashCode();
+	}
+
+	@Override
 	public boolean equals(Object o) {
 		if (o == this)
 			return true;
@@ -19,9 +27,7 @@ public class Star extends KDElement {
 			return false;
 
 		Star s = (Star) o;
-		return ((String) s.value).equals((String) value) && s.name.equals(name)
-				&& s.coordinates.get(0).equals(coordinates.get(0)) && s.coordinates.get(1).equals(coordinates.get(1))
-				&& s.coordinates.get(2).equals(coordinates.get(2));
+		return new EqualsBuilder().appendSuper(super.equals(o)).append(s.name, name).isEquals();
 	}
 
 	@Override

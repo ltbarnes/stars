@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 public class Graphable {
 
 	public final List<Double> coordinates;
@@ -37,4 +40,22 @@ public class Graphable {
 		this.dimension = dimension;
 	}
 
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder(17, 31).append(coordinates.get(0)).append(coordinates.get(1))
+				.append(coordinates.get(2)).toHashCode();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == this)
+			return true;
+		if (!(o instanceof Graphable))
+			return false;
+
+		Graphable s = (Graphable) o;
+		return new EqualsBuilder().append(s.coordinates.get(0), coordinates.get(0))
+				.append(s.coordinates.get(1), coordinates.get(1)).append(s.coordinates.get(2), coordinates.get(2))
+				.isEquals();
+	}
 }

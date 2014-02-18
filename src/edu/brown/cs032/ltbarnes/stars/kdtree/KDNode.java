@@ -1,12 +1,20 @@
 package edu.brown.cs032.ltbarnes.stars.kdtree;
 
+/**
+ * An element used by {@link GenericKDTree} to keep track of children nodes and
+ * the depth of an element within the tree.
+ * 
+ * @author ltbarnes
+ * 
+ * @param <T> the type of {@link KDElement}s in the tree
+ */
 public class KDNode<T extends KDElement> {
 
-	private KDNode<T> left_;
-	private KDNode<T> right_;
+	private KDNode<T> leftChild_;
+	private KDNode<T> rightChild_;
 	private int depth_;
-	private final T element;
-	
+	private T element;
+
 	public KDNode(T element) {
 		this.element = element;
 	}
@@ -33,19 +41,24 @@ public class KDNode<T extends KDElement> {
 	}
 
 	public void setLeftChild(KDNode<T> left) {
-		this.left_ = left;
+		this.leftChild_ = left;
 	}
 
 	public void setRightChild(KDNode<T> right) {
-		this.right_ = right;
+		this.rightChild_ = right;
 	}
 
 	public KDNode<T> getLeftChild() {
-		return left_;
+		return leftChild_;
 	}
 
 	public KDNode<T> getRightChild() {
-		return right_;
+		return rightChild_;
+	}
+	
+	@Override
+	public int hashCode() {
+		return element.hashCode();
 	}
 
 	@Override
@@ -60,7 +73,7 @@ public class KDNode<T extends KDElement> {
 
 	@Override
 	public String toString() {
-		return String.format("(%s: L:%s R:%s)", element.value, left_, right_);
+		return String.format("(%s: L:%s R:%s)", element.value, leftChild_, rightChild_);
 	}
 
 }
