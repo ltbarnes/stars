@@ -53,6 +53,6 @@ public interface KDTree<T extends KDElement> extends Iterable<T>, Collection<T> 
 	 *            - the distance from the element to search
 	 * @return a list of neighboring nodes ordered from closes to farthest
 	 */
-	public List<T> kNNSearchWithRadius(T e, int radius);
+	public List<T> kNNSearchWithRadius(T e, double radius);
 
 }

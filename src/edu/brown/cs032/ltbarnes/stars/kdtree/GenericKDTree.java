@@ -96,7 +96,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		return result;
 	}
 
-	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest, Integer radius) {
+	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest,
+			Double radius) {
 		KDNode<T> leftChild = current.getLeftChild();
 		KDNode<T> rightChild = current.getRightChild();
 		double currDist = starDist2(current.getElement(), star.getElement());
@@ -137,7 +138,7 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	private void checkAdd(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest,
-			double currDist, Integer radius) {
+			double currDist, Double radius) {
 		if (!current.getElement().equals(star.getElement())) {
 			if (radius != null && currDist <= radius)
 				list.add(new KDEval<KDNode<T>, Double>(current, currDist));
@@ -154,7 +155,7 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 			}
 		}
 	}
-	
+
 	private double calcDist2Plane(KDNode<T> current, KDNode<T> star, int dim) {
 		KDElement s = star.getElement();
 		Double[] coords = new Double[3];
@@ -164,9 +165,9 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	@Override
-	public List<T> kNNSearchWithRadius(T s, int radius) {
+	public List<T> kNNSearchWithRadius(T s, double radius) {
 		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
-		search(list, root_, new KDNode<>(s), 1, new Integer(radius * radius));
+		search(list, root_, new KDNode<>(s), 1, new Double(radius * radius));
 		Collections.sort(list, new KDEvalComparator());
 		List<T> result = new ArrayList<>();
 		for (KDEval<KDNode<T>, Double> se : list)
