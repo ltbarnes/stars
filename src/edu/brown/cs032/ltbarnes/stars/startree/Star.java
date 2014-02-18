@@ -2,6 +2,13 @@ package edu.brown.cs032.ltbarnes.stars.startree;
 
 import edu.brown.cs032.ltbarnes.kdtree.KDElement;
 
+/**
+ * A superclass of {@link KDElement} used to store names of stars and the coordinates of their
+ * locations in three dimensional space.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class Star extends KDElement {
 
 	public final String name;
@@ -38,8 +45,8 @@ public class Star extends KDElement {
 
 	@Override
 	public String toString() {
-		return String.format("Star: %s '%s' (%.2f, %.2f, %.2f)", value, name, coordinates.get(0), coordinates.get(1),
-				coordinates.get(2));
+		return String.format("Star: %s '%s' (%.2f, %.2f, %.2f)", value.toString(), name, coordinates.get(0),
+				coordinates.get(1), coordinates.get(2));
 	}
 
 }

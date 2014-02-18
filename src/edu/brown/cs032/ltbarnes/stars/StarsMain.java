@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import edu.brown.cs032.ltbarnes.kdtree.GenericKDTree;
 import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
-import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 
 public class StarsMain {
 
@@ -68,7 +68,7 @@ public class StarsMain {
 	}
 
 	public static void runStars(List<Star> stars) {
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 		new StarsConsole(st);
 	}
 

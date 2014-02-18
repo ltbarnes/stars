@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.Test;
 
 import edu.brown.cs032.ltbarnes.kdtree.GenericKDTree;
+import edu.brown.cs032.ltbarnes.kdtree.KDNode;
 import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.StarsMain;
 
@@ -20,7 +21,8 @@ public class StarTreeTest {
 	public void testStarsEqual() {
 		assertTrue(new Star("0", "", -5, -2, 0).equals(new Star("0", "", -5, -2, 0)));
 		assertEquals(new Star("0", "", -5, -2, 0), new Star("0", "", -5, -2, 0));
-		assertEquals(new StarNode(new Star("1823", "Blah", 2, 1, 2)), new StarNode(new Star("1823", "Blah", 2, 1, 2)));
+		assertEquals(new KDNode<Star>(new Star("1823", "Blah", 2, 1, 2)), new KDNode<Star>(new Star("1823", "Blah", 2,
+				1, 2)));
 	}
 
 	@Test
@@ -33,7 +35,7 @@ public class StarTreeTest {
 		stars.add(new Star("4", "", 1, -1, 0));
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:null)))", st.toString());
 		assertEquals(7, st.size());
@@ -46,7 +48,7 @@ public class StarTreeTest {
 		stars.add(new Star("4", "", 1, -1, 0));
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
-		st = new StarTree(stars);
+		st = new GenericKDTree<>(stars, 3);
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:null)))", st.toString());
 		assertEquals(7, st.size());
@@ -75,7 +77,7 @@ public class StarTreeTest {
 		stars.add(new Star("20", "", 9, 3, 0));
 		stars.add(new Star("21", "", 10, 4, 1));
 		stars.add(new Star("22", "", 11, 5, 2));
-		st = new StarTree(stars);
+		st = new GenericKDTree<>(stars, 3);
 		assertEquals("(11: L:(5: L:(2: L:(1: L:(0: L:null R:null) R:null) R:(4: L:(3: L:null R:null) R:null))"
 				+ " R:(8: L:(7: L:(6: L:null R:null) R:null) R:(10: L:(9: L:null R:null) R:null))) "
 				+ "R:(17: L:(14: L:(13: L:(12: L:null R:null) R:null) R:(16: L:(15: L:null R:null) R:null))"
@@ -93,7 +95,7 @@ public class StarTreeTest {
 		stars.add(new Star("7", "", 52, 0.02084, 19));
 		stars.add(new Star("8", "", 174, 0.08288, 84));
 		stars.add(new Star("9", "", 166, 0.10297, 123));
-		st = new StarTree(stars);
+		st = new GenericKDTree<>(stars, 3);
 		assertEquals("(9: L:(4: L:(0: L:(2: L:null R:null) R:null) R:(7: L:(6: L:null R:null) "
 				+ "R:null)) R:(5: L:(3: L:(1: L:null R:null) R:null) R:(8: L:null R:null)))", st.toString());
 		assertEquals(10, st.size());
@@ -109,7 +111,7 @@ public class StarTreeTest {
 		stars.add(new Star("4", "", 1, -1, 0));
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 		assertEquals(7, st.size());
 
 		st.addElement(new Star("7", "", 3, 1, 1));
@@ -135,14 +137,14 @@ public class StarTreeTest {
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		int i = 0;
 		for (Star s : st) {
 			assertEquals(stars.get(i), s);
 			i++;
 		}
-		 assertEquals(i, st.size());
+		assertEquals(i, st.size());
 
 		stars.clear();
 		stars.add(new Star("0", "", -11, -5, -2));
@@ -168,14 +170,14 @@ public class StarTreeTest {
 		stars.add(new Star("20", "", 9, 3, 0));
 		stars.add(new Star("21", "", -10, 4, 1));
 		stars.add(new Star("22", "", -11, 5, 2));
-		st = new StarTree(stars);
+		st = new GenericKDTree<>(stars, 3);
 
 		i = 0;
 		for (Star s : st) {
 			assertEquals(stars.get(i), s);
 			i++;
 		}
-		 assertEquals(i, st.size());
+		assertEquals(i, st.size());
 	}
 
 	@Test
@@ -188,11 +190,11 @@ public class StarTreeTest {
 
 	@Test
 	public void testDist2Plane() {
-		StarNode star = new StarNode(new Star("", "", 1, 1, 1));
-		StarNode current = new StarNode(new Star("", "", 0, -4, 7), 0);
+		KDNode<Star> star = new KDNode<Star>(new Star("", "", 1, 1, 1));
+		KDNode<Star> current = new KDNode<Star>(new Star("", "", 0, -4, 7), 0);
 		int dim = current.getDepth() % 3;
 		assertEquals(0, dim);
-		Star s = star.getStar();
+		Star s = star.getElement();
 		Double[] coords = new Double[3];
 		s.coordinates.toArray(coords);
 		coords[dim] = current.getDimension(dim);
@@ -213,7 +215,7 @@ public class StarTreeTest {
 		stars.add(s11);
 		stars.add(s22);
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		assertEquals("(11: L:(00: L:null R:null) R:(22: L:null R:null))", st.toString());
 
@@ -249,7 +251,7 @@ public class StarTreeTest {
 		stars.add(s9);
 		stars.add(s10);
 
-		st = new StarTree(stars);
+		st = new GenericKDTree<>(stars, 3);
 
 		starList.clear();
 		starList.add(s8);
@@ -305,7 +307,7 @@ public class StarTreeTest {
 		stars.add(s9);
 		stars.add(s10);
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		List<Star> starList = new ArrayList<>();
 		addStarsToSet(starList, s8, s7, s9);
@@ -369,7 +371,7 @@ public class StarTreeTest {
 		stars.add(s9);
 		stars.add(s10);
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		List<Star> starList = new ArrayList<>();
 		addStarsToSet(starList, s1, s2, s3, s5, s4);
@@ -395,7 +397,7 @@ public class StarTreeTest {
 		if ((stars = StarsMain.parseInput(args)) == null)
 			return;
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		Star s0 = new Star("0", "Sol", 0, 0, 0);
 		Star s1 = new Star("1", "", 282.43485, 0.00449, 5.36884);
@@ -460,7 +462,7 @@ public class StarTreeTest {
 		if ((stars = StarsMain.parseInput(args)) == null)
 			return;
 
-		KDTree<Star> st = new StarTree(stars);
+		KDTree<Star> st = new GenericKDTree<>(stars, 3);
 
 		Star s0 = new Star("0", "Sol", 0, 0, 0);
 		Star s1 = new Star("1", "", 282.43485, 0.00449, 5.36884);

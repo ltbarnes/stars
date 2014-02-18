@@ -1,8 +1,8 @@
 package edu.brown.cs032.ltbarnes.kdtree;
 
 /**
- * An element used by {@link GenericKDTree} to keep track of children nodes and
- * the depth of an element within the tree.
+ * An element used by {@link GenericKDTree} to keep track of children nodes and the depth of an
+ * element within the tree.
  * 
  * @author ltbarnes
  * 
@@ -84,7 +84,7 @@ public class KDNode<T extends KDElement> {
 
 	@Override
 	public String toString() {
-		return String.format("(%s: L:%s R:%s)", element.value, leftChild_, rightChild_);
+		return String.format("(%s: L:%s R:%s)", element.value.toString(), leftChild_, rightChild_);
 	}
 
 }

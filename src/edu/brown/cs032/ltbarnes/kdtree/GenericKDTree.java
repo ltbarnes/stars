@@ -10,12 +10,10 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * An instance of {@link KDTree} capable of constructing a balanced KDTree in
- * any dimension.
+ * An instance of {@link KDTree} capable of constructing a balanced KDTree in any dimension.
  * 
  * <p>
- * NOTE: removeElement(T e) METHOD NOT FUNCTIONAL IN THIS IMPLEMENTATION OF
- * {@link KDTree}.
+ * NOTE: removeElement(T e) METHOD NOT FUNCTIONAL IN THIS IMPLEMENTATION OF {@link KDTree}.
  * 
  * @author ltbarnes
  * 
@@ -33,52 +31,87 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		root_ = buildTree(0, elements);
 	}
 
+	/**
+	 * Recursively builds the {@link KDTree} based on the initial list of elements. At each depth a
+	 * new dimension is used to sort the list and calculate a median element. All elements less than
+	 * the median are used to build a sub tree to the left of the median and all the greater
+	 * elements are built into a subtree to the right.
+	 * 
+	 * @param currDepth
+	 *            - the current depth of the nodes
+	 * @param elements
+	 *            - the list of elements not yet added to the tree
+	 * @return the root of the created tree
+	 */
 	private KDNode<T> buildTree(int currDepth, List<T> elements) {
+
+		// set the dimension to use at this depth
 		int dim = currDepth % dimension_;
+
+		// sort the list and find the median element
 		int midIndex = elements.size() / 2;
 		Collections.sort(elements, new DimensionComparator(dim));
 		KDNode<T> parent = new KDNode<>(elements.get(midIndex), currDepth);
 		size_++;
 
+		// use the smaller elements to build a left subtree
 		if (midIndex > 0)
 			parent.setLeftChild(buildTree(currDepth + 1, elements.subList(0, midIndex)));
 		else
 			parent.setLeftChild(null);
 
+		// use the greater elements to build a right subtree
 		if (midIndex < elements.size() - 1)
 			parent.setRightChild(buildTree(currDepth + 1, elements.subList(midIndex + 1, elements.size())));
 		else
 			parent.setRightChild(null);
 
+		// return the root node of the subtrees
 		return parent;
 	}
 
 	@Override
 	public void addElement(T e) {
+		// get the leaf node where e should be appended
 		KDNode<T> element = new KDNode<>(e);
 		KDNode<T> kdn = addcursion(root_, element);
+
+		// calculate the dimension to use based on the depth of the node
 		int dim = kdn.getDepth() % dimension_;
 
+		// if e is in the tree return
 		if (element.equals(kdn))
 			return;
+		// append element as the left or right child depending the dimension being evaluated
 		if (element.getDimension(dim) <= kdn.getDimension(dim))
 			kdn.setLeftChild(element);
 		else {
 			kdn.setRightChild(element);
 		}
+		// increment size
 		size_++;
 	}
 
-	private KDNode<T> addcursion(KDNode<T> current, KDNode<T> pnt) {
+	/**
+	 * Recursively descends into the tree based on the dimensions of {@code point} and returns the
+	 * final leaf node.
+	 * 
+	 * @param current
+	 *            - the node currently being evaluated
+	 * @param point
+	 *            - the goal point used to descend the tree
+	 * @return the leaf node reached after descending the tree
+	 */
+	private KDNode<T> addcursion(KDNode<T> current, KDNode<T> point) {
 		int dim = (current.getDepth()) % dimension_;
 		KDNode<T> result = current;
 
-		if (current.equals(pnt))
+		if (current.equals(point))
 			return result;
-		if (pnt.getDimension(dim) <= current.getDimension(dim) && current.getLeftChild() != null)
-			result = addcursion(current.getLeftChild(), pnt);
+		if (point.getDimension(dim) <= current.getDimension(dim) && current.getLeftChild() != null)
+			result = addcursion(current.getLeftChild(), point);
 		else if (current.getRightChild() != null) {
-			result = addcursion(current.getRightChild(), pnt);
+			result = addcursion(current.getRightChild(), point);
 		}
 		return result;
 	}
@@ -104,6 +137,13 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		return sortSearch(list);
 	}
 
+	/**
+	 * Sorts the {@link KDEval}s returned by the {@code search} routine
+	 * 
+	 * @param list
+	 *            - the list of {@link KDEval}s to sort
+	 * @return a list of sorted tree elements
+	 */
 	private List<T> sortSearch(List<KDEval<KDNode<T>, Double>> list) {
 		Collections.sort(list, new KDEvalComparator());
 		List<T> result = new ArrayList<>();
@@ -112,60 +152,101 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		return result;
 	}
 
-	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> pnt, int numNearest,
+	/**
+	 * Recursively searches the tree adding and removing elements from the list of return values
+	 * depending on the parameters specified. If a radius is given then all points within the radius
+	 * from center {@code point} are added to the list. Otherwise only the closest
+	 * {@code numNearest} points are added (if that many exist in the tree)
+	 * 
+	 * @param list
+	 *            - the list of return values
+	 * @param current
+	 *            - the node to potentially be added
+	 * @param point
+	 *            - the point being used for the search
+	 * @param numNearest
+	 *            - the number of nearest neighbors to collect for the list (only used if radius is
+	 *            null)
+	 * @param currDist
+	 *            - the squared magnitude between {@link current} and {@link point}
+	 * @param radius
+	 *            - the radius used to collect nearby elements (radius is null when using
+	 *            {@code kNNSearch})
+	 */
+	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> point, int numNearest,
 			Double radius) {
+
+		// get current's children and distance from point
 		KDNode<T> leftChild = current.getLeftChild();
 		KDNode<T> rightChild = current.getRightChild();
-		double currDist = pointDist2(current.getElement(), pnt.getElement());
+		double currDist = pointDist2(current.getElement(), point.getElement());
 
-		// base case leaf node
+		// base case leaf node: potentially add current and return.
 		if (leftChild == null && rightChild == null) {
-			checkAdd(list, current, pnt, numNearest, currDist, radius);
+			checkAdd(list, current, point, numNearest, currDist, radius);
 			return;
 		}
 
+		// calculate the dimension to use based on depth
 		int dim = (current.getDepth()) % dimension_;
 		KDNode<T> otherChild;
 
-		if (pnt.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
-			search(list, leftChild, pnt, numNearest, radius);
+		// check which direction to traverse the tree in depending on the current dimension
+		if (point.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
+			search(list, leftChild, point, numNearest, radius);
 			otherChild = rightChild;
 		} else if (rightChild != null) {
-			search(list, rightChild, pnt, numNearest, radius);
+			search(list, rightChild, point, numNearest, radius);
 			otherChild = leftChild;
 		} else {
 			otherChild = leftChild;
 		}
 
-		checkAdd(list, current, pnt, numNearest, currDist, radius);
+		// potentially add the current node
+		checkAdd(list, current, point, numNearest, currDist, radius);
 
+		// set the maxDist to the max value in the list
 		double maxDist;
 		if (list.isEmpty())
 			maxDist = Double.MAX_VALUE;
 		else
 			maxDist = list.get(list.size() - 1).b;
 
-		double distPlane = this.calcDist2Plane(current, pnt, dim);
+		// calculate the distance from the given point to the hyperplane created at current
+		double distPlane = this.calcDist2Plane(current, point, dim);
 
+		// if the radius intersects the plane or the maxDist is larger than distPlane then search
+		// the other side of the sub tree
 		if ((radius != null && distPlane <= radius && otherChild != null)
 				|| (radius == null && (list.size() < numNearest || distPlane < maxDist) && otherChild != null)) {
-			search(list, otherChild, pnt, numNearest, radius);
+			search(list, otherChild, point, numNearest, radius);
 		}
 	}
 
 	/**
+	 * Checks whether an element should be added to the list of return values from the current
+	 * search.
+	 * 
 	 * @param list
+	 *            - the list of return values
 	 * @param current
-	 * @param pnt
+	 *            - the node to potentially be added
+	 * @param point
+	 *            - the point being used for the search
 	 * @param numNearest
+	 *            - the number of nearest neighbors to collect for the list (only used if radius is
+	 *            null)
 	 * @param currDist
+	 *            - the squared magnitude between {@link current} and {@link point}
 	 * @param radius
+	 *            - the radius used to collect nearby elements (radius is null when using
+	 *            {@code kNNSearch})
 	 */
-	private void checkAdd(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> pnt, int numNearest,
+	private void checkAdd(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> point, int numNearest,
 			double currDist, Double radius) {
 
 		// only add an element if it's not the point given
-		if (!current.getElement().equals(pnt.getElement())) {
+		if (!current.getElement().equals(point.getElement())) {
 
 			// if radius != null evaluate with radius distance
 			if (radius != null && currDist <= radius)
@@ -178,8 +259,7 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 				if (list.size() < numNearest) {
 					list.add(new KDEval<KDNode<T>, Double>(current, currDist));
 
-					// otherwise check if currDist is smaller than the largest
-					// distance in the list
+					// otherwise check if currDist is smaller than the largest distance in the list
 				} else {
 					Collections.sort(list, new KDEvalComparator());
 					if (currDist < list.get(numNearest - 1).b) {
@@ -192,9 +272,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	/**
-	 * Calculates the minimum squared magnitude from the point determined by
-	 * {@code point} to the plane created by the {@code dim} dimension of
-	 * {@code current}
+	 * Calculates the minimum squared magnitude from the point determined by {@code point} to the
+	 * hyperplane created by the {@code dim} dimension of {@code current}
 	 * 
 	 * @param current
 	 *            - the point where the plane lies
@@ -228,8 +307,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	/**
-	 * An instance of {@link Comparator} used to compare the coordinates of two
-	 * {@link KDElement}s at the given dimension.
+	 * An instance of {@link Comparator} used to compare the coordinates of two {@link KDElement}s
+	 * at the given dimension.
 	 * 
 	 * @author ltbarnes
 	 * 
@@ -250,8 +329,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	/**
-	 * Compares two {@link KDEval}<{@link KDNode}, {@link Double}> objects by
-	 * comparing the {@link Double} value associated with each.
+	 * Compares two {@link KDEval}<{@link KDNode}, {@link Double}> objects by comparing the
+	 * {@link Double} value associated with each.
 	 * 
 	 * @author ltbarnes
 	 * 
@@ -266,8 +345,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	/**
-	 * An instance of {@link Iterator} used to iterate through the KDTree using
-	 * an in-order traversal.
+	 * An instance of {@link Iterator} used to iterate through the KDTree using an in-order
+	 * traversal.
 	 * 
 	 * @author ltbarnes
 	 * 
@@ -332,8 +411,8 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	/**
-	 * Helper class used to pass around and keep track of elements requiring a
-	 * single mapping to another object.
+	 * Helper class used to pass around and keep track of elements requiring a single mapping to
+	 * another object.
 	 * 
 	 * @author ltbarnes
 	 * 

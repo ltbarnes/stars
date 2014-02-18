@@ -3,8 +3,7 @@ package edu.brown.cs032.ltbarnes.kdtree;
 import java.util.List;
 
 /**
- * An instance of {@link Graphable} retained by {@link KDNode}s within a
- * {@link KDTree}.
+ * An instance of {@link Graphable} retained by {@link KDNode}s within a {@link KDTree}.
  * 
  * @author ltbarnes
  * 
@@ -46,6 +45,12 @@ public class KDElement extends Graphable {
 		} else if (!value.equals(other.value))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("KDElement: %s (%.2f, %.2f, %.2f)", value.toString(), coordinates.get(0),
+				coordinates.get(1), coordinates.get(2));
 	}
 
 }
