@@ -6,7 +6,8 @@ package edu.brown.cs032.ltbarnes.kdtree;
  * 
  * @author ltbarnes
  * 
- * @param <T> the type of {@link KDElement}s in the tree
+ * @param <T>
+ *            the type of {@link KDElement}s in the tree
  */
 public class KDNode<T extends KDElement> {
 
@@ -55,20 +56,30 @@ public class KDNode<T extends KDElement> {
 	public KDNode<T> getRightChild() {
 		return rightChild_;
 	}
-	
+
 	@Override
 	public int hashCode() {
-		return element.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((element == null) ? 0 : element.hashCode());
+		return result;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o == this)
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(o instanceof KDNode))
+		if (obj == null)
 			return false;
-
-		return ((KDNode<?>) o).getElement().equals(element);
+		if (getClass() != obj.getClass())
+			return false;
+		KDNode<?> other = (KDNode<?>) obj;
+		if (element == null) {
+			if (other.element != null)
+				return false;
+		} else if (!element.equals(other.element))
+			return false;
+		return true;
 	}
 
 	@Override

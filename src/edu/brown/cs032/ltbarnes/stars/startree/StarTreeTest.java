@@ -180,10 +180,10 @@ public class StarTreeTest {
 
 	@Test
 	public void testStarDist2() {
-		assertEquals(3, GenericKDTree.starDist2(new Star("", "", 1, 1, 1), new Star("", "", 0, 0, 0)), 1e-12);
-		assertEquals(3, GenericKDTree.starDist2(new Star("", "", 0, 0, 0), new Star("", "", 1, 1, 1)), 1e-12);
-		assertEquals(9, GenericKDTree.starDist2(new Star("", "", 1, 1, -2), new Star("", "", 1, 1, 1)), 1e-12);
-		assertEquals(9, GenericKDTree.starDist2(new Star("", "", 1, 1, 1), new Star("", "", 1, 1, -2)), 1e-12);
+		assertEquals(3, GenericKDTree.pointDist2(new Star("", "", 1, 1, 1), new Star("", "", 0, 0, 0)), 1e-12);
+		assertEquals(3, GenericKDTree.pointDist2(new Star("", "", 0, 0, 0), new Star("", "", 1, 1, 1)), 1e-12);
+		assertEquals(9, GenericKDTree.pointDist2(new Star("", "", 1, 1, -2), new Star("", "", 1, 1, 1)), 1e-12);
+		assertEquals(9, GenericKDTree.pointDist2(new Star("", "", 1, 1, 1), new Star("", "", 1, 1, -2)), 1e-12);
 	}
 
 	@Test
@@ -198,7 +198,7 @@ public class StarTreeTest {
 		coords[dim] = current.getDimension(dim);
 		Double[] correct = { 0.0, 1.0, 1.0 };
 		assertArrayEquals(correct, coords);
-		assertEquals(1, GenericKDTree.starDist2(new Star("", "", coords[0], coords[1], coords[2]), s), 1e-12);
+		assertEquals(1, GenericKDTree.pointDist2(new Star("", "", coords[0], coords[1], coords[2]), s), 1e-12);
 
 	}
 

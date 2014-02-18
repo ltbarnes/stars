@@ -9,9 +9,14 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.List;
 
-import edu.brown.cs032.ltbarnes.stars.startree.Star;
-
 /**
+ * An instance of {@link KDTree} capable of constructing a balanced KDTree in
+ * any dimension.
+ * 
+ * <p>
+ * NOTE: removeElement(T e) METHOD NOT FUNCTIONAL IN THIS IMPLEMENTATION OF
+ * {@link KDTree}.
+ * 
  * @author ltbarnes
  * 
  * @param <T>
@@ -28,20 +33,20 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		root_ = buildTree(0, elements);
 	}
 
-	private KDNode<T> buildTree(int currDepth, List<T> stars) {
+	private KDNode<T> buildTree(int currDepth, List<T> elements) {
 		int dim = currDepth % dimension_;
-		int midIndex = stars.size() / 2;
-		Collections.sort(stars, new DimensionComparator(dim));
-		KDNode<T> parent = new KDNode<>(stars.get(midIndex), currDepth);
+		int midIndex = elements.size() / 2;
+		Collections.sort(elements, new DimensionComparator(dim));
+		KDNode<T> parent = new KDNode<>(elements.get(midIndex), currDepth);
 		size_++;
 
 		if (midIndex > 0)
-			parent.setLeftChild(buildTree(currDepth + 1, stars.subList(0, midIndex)));
+			parent.setLeftChild(buildTree(currDepth + 1, elements.subList(0, midIndex)));
 		else
 			parent.setLeftChild(null);
 
-		if (midIndex < stars.size() - 1)
-			parent.setRightChild(buildTree(currDepth + 1, stars.subList(midIndex + 1, stars.size())));
+		if (midIndex < elements.size() - 1)
+			parent.setRightChild(buildTree(currDepth + 1, elements.subList(midIndex + 1, elements.size())));
 		else
 			parent.setRightChild(null);
 
@@ -49,105 +54,135 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 	}
 
 	@Override
-	public void addElement(T s) {
-		KDNode<T> star = new KDNode<>(s);
-		KDNode<T> sn = addcursion(root_, star);
-		int dim = sn.getDepth() % dimension_;
+	public void addElement(T e) {
+		KDNode<T> element = new KDNode<>(e);
+		KDNode<T> kdn = addcursion(root_, element);
+		int dim = kdn.getDepth() % dimension_;
 
-		if (star.equals(sn))
+		if (element.equals(kdn))
 			return;
-		if (star.getDimension(dim) <= sn.getDimension(dim))
-			sn.setLeftChild(star);
+		if (element.getDimension(dim) <= kdn.getDimension(dim))
+			kdn.setLeftChild(element);
 		else {
-			sn.setRightChild(star);
+			kdn.setRightChild(element);
 		}
 		size_++;
 	}
 
-	private KDNode<T> addcursion(KDNode<T> current, KDNode<T> star) {
+	private KDNode<T> addcursion(KDNode<T> current, KDNode<T> pnt) {
 		int dim = (current.getDepth()) % dimension_;
 		KDNode<T> result = current;
 
-		if (current.equals(star))
+		if (current.equals(pnt))
 			return result;
-		if (star.getDimension(dim) <= current.getDimension(dim) && current.getLeftChild() != null)
-			result = addcursion(current.getLeftChild(), star);
+		if (pnt.getDimension(dim) <= current.getDimension(dim) && current.getLeftChild() != null)
+			result = addcursion(current.getLeftChild(), pnt);
 		else if (current.getRightChild() != null) {
-			result = addcursion(current.getRightChild(), star);
+			result = addcursion(current.getRightChild(), pnt);
 		}
 		return result;
 	}
 
 	@Override
-	public boolean removeElement(T s) {
+	public boolean removeElement(T e) {
 		return false;
 	}
 
 	@Override
-	public List<T> kNNSearch(T s, int numNearest) {
+	public List<T> kNNSearch(T e, int numNearest) {
 		if (numNearest == 0)
 			return new ArrayList<T>();
 		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
-		search(list, root_, new KDNode<>(s), numNearest, null);
+		search(list, root_, new KDNode<>(e), numNearest, null);
+		return sortSearch(list);
+	}
+
+	@Override
+	public List<T> kNNSearchWithRadius(T e, double radius) {
+		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
+		search(list, root_, new KDNode<>(e), 1, new Double(radius * radius));
+		return sortSearch(list);
+	}
+
+	private List<T> sortSearch(List<KDEval<KDNode<T>, Double>> list) {
 		Collections.sort(list, new KDEvalComparator());
 		List<T> result = new ArrayList<>();
-		for (KDEval<KDNode<T>, Double> se : list)
-			result.add(se.node.getElement());
+		for (KDEval<KDNode<T>, Double> ke : list)
+			result.add(ke.a.getElement());
 		return result;
 	}
 
-	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest,
+	private void search(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> pnt, int numNearest,
 			Double radius) {
 		KDNode<T> leftChild = current.getLeftChild();
 		KDNode<T> rightChild = current.getRightChild();
-		double currDist = starDist2(current.getElement(), star.getElement());
+		double currDist = pointDist2(current.getElement(), pnt.getElement());
 
 		// base case leaf node
 		if (leftChild == null && rightChild == null) {
-			checkAdd(list, current, star, numNearest, currDist, radius);
+			checkAdd(list, current, pnt, numNearest, currDist, radius);
 			return;
 		}
 
 		int dim = (current.getDepth()) % dimension_;
 		KDNode<T> otherChild;
 
-		if (star.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
-			search(list, leftChild, star, numNearest, radius);
+		if (pnt.getDimension(dim) <= current.getDimension(dim) && leftChild != null) {
+			search(list, leftChild, pnt, numNearest, radius);
 			otherChild = rightChild;
 		} else if (rightChild != null) {
-			search(list, rightChild, star, numNearest, radius);
+			search(list, rightChild, pnt, numNearest, radius);
 			otherChild = leftChild;
 		} else {
 			otherChild = leftChild;
 		}
 
-		checkAdd(list, current, star, numNearest, currDist, radius);
+		checkAdd(list, current, pnt, numNearest, currDist, radius);
 
 		double maxDist;
 		if (list.isEmpty())
 			maxDist = Double.MAX_VALUE;
 		else
-			maxDist = list.get(list.size() - 1).minDist;
+			maxDist = list.get(list.size() - 1).b;
 
-		double distPlane = this.calcDist2Plane(current, star, dim);
+		double distPlane = this.calcDist2Plane(current, pnt, dim);
 
 		if ((radius != null && distPlane <= radius && otherChild != null)
 				|| (radius == null && (list.size() < numNearest || distPlane < maxDist) && otherChild != null)) {
-			search(list, otherChild, star, numNearest, radius);
+			search(list, otherChild, pnt, numNearest, radius);
 		}
 	}
 
-	private void checkAdd(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> star, int numNearest,
+	/**
+	 * @param list
+	 * @param current
+	 * @param pnt
+	 * @param numNearest
+	 * @param currDist
+	 * @param radius
+	 */
+	private void checkAdd(List<KDEval<KDNode<T>, Double>> list, KDNode<T> current, KDNode<T> pnt, int numNearest,
 			double currDist, Double radius) {
-		if (!current.getElement().equals(star.getElement())) {
+
+		// only add an element if it's not the point given
+		if (!current.getElement().equals(pnt.getElement())) {
+
+			// if radius != null evaluate with radius distance
 			if (radius != null && currDist <= radius)
 				list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+
+			// if radius is null evaluate for nearest neighbors
 			else if (radius == null) {
+
+				// if the list doesn't contain enough neighbors add current
 				if (list.size() < numNearest) {
 					list.add(new KDEval<KDNode<T>, Double>(current, currDist));
+
+					// otherwise check if currDist is smaller than the largest
+					// distance in the list
 				} else {
 					Collections.sort(list, new KDEvalComparator());
-					if (currDist < list.get(numNearest - 1).minDist) {
+					if (currDist < list.get(numNearest - 1).b) {
 						list.remove(numNearest - 1);
 						list.add(new KDEval<KDNode<T>, Double>(current, currDist));
 					}
@@ -156,23 +191,25 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		}
 	}
 
-	private double calcDist2Plane(KDNode<T> current, KDNode<T> star, int dim) {
-		KDElement s = star.getElement();
+	/**
+	 * Calculates the minimum squared magnitude from the point determined by
+	 * {@code point} to the plane created by the {@code dim} dimension of
+	 * {@code current}
+	 * 
+	 * @param current
+	 *            - the point where the plane lies
+	 * @param point
+	 *            - the point from which to calculate the distance
+	 * @param dim
+	 *            - the dimension to use to create a plane
+	 * @return the squared magnitude from the point to the plane
+	 */
+	private double calcDist2Plane(KDNode<T> current, KDNode<T> point, int dim) {
+		KDElement e = point.getElement();
 		Double[] coords = new Double[3];
-		s.coordinates.toArray(coords);
+		e.coordinates.toArray(coords);
 		coords[dim] = current.getDimension(dim);
-		return starDist2(new Star("", "", coords[0], coords[1], coords[2]), s);
-	}
-
-	@Override
-	public List<T> kNNSearchWithRadius(T s, double radius) {
-		List<KDEval<KDNode<T>, Double>> list = new ArrayList<>();
-		search(list, root_, new KDNode<>(s), 1, new Double(radius * radius));
-		Collections.sort(list, new KDEvalComparator());
-		List<T> result = new ArrayList<>();
-		for (KDEval<KDNode<T>, Double> se : list)
-			result.add(se.node.getElement());
-		return result;
+		return pointDist2(new KDElement("", coords[0], coords[1], coords[2]), e);
 	}
 
 	@Override
@@ -190,6 +227,13 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		return root_.toString();
 	}
 
+	/**
+	 * An instance of {@link Comparator} used to compare the coordinates of two
+	 * {@link KDElement}s at the given dimension.
+	 * 
+	 * @author ltbarnes
+	 * 
+	 */
 	private static class DimensionComparator implements Comparator<KDElement> {
 
 		private int dim_;
@@ -205,15 +249,29 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 
 	}
 
+	/**
+	 * Compares two {@link KDEval}<{@link KDNode}, {@link Double}> objects by
+	 * comparing the {@link Double} value associated with each.
+	 * 
+	 * @author ltbarnes
+	 * 
+	 */
 	private class KDEvalComparator implements Comparator<KDEval<KDNode<T>, Double>> {
 
 		@Override
 		public int compare(KDEval<KDNode<T>, Double> se1, KDEval<KDNode<T>, Double> se2) {
-			return Double.compare(se1.minDist, se2.minDist);
+			return Double.compare(se1.b, se2.b);
 		}
 
 	}
 
+	/**
+	 * An instance of {@link Iterator} used to iterate through the KDTree using
+	 * an in-order traversal.
+	 * 
+	 * @author ltbarnes
+	 * 
+	 */
 	private class InOrderIterator implements Iterator<T> {
 
 		private Deque<KDNode<T>> dq_;
@@ -241,6 +299,9 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		@Override
 		public void remove() {}
 
+		/**
+		 * "Slide" down the left side of a subtree until the left child is null.
+		 */
 		private void slide() {
 			while (current_ != null) {
 				dq_.push(current_);
@@ -249,7 +310,19 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		}
 	}
 
-	public static double starDist2(KDElement e1, KDElement e2) {
+	/**
+	 * Returns the squared magnitude between two {@link KDElement}s.
+	 * 
+	 * <p>
+	 * mag^2 = (e1.x - e2.x)^2 + (e2.y - e2.y)^ 2 + ... + (e1.z - e2.z)^2
+	 * 
+	 * @param e1
+	 *            - element 1
+	 * @param e2
+	 *            - element 2
+	 * @return - the squared distance
+	 */
+	public static double pointDist2(KDElement e1, KDElement e2) {
 		int sum = 0;
 		for (int i = 0; i < 3; i++) {
 			double diff = e1.coordinates.get(i) - e2.coordinates.get(i);
@@ -258,14 +331,25 @@ public class GenericKDTree<T extends KDElement> extends AbstractCollection<T> im
 		return sum;
 	}
 
+	/**
+	 * Helper class used to pass around and keep track of elements requiring a
+	 * single mapping to another object.
+	 * 
+	 * @author ltbarnes
+	 * 
+	 * @param <A>
+	 *            the first element
+	 * @param <B>
+	 *            the mapped object
+	 */
 	private static class KDEval<A, B> {
 
-		A node;
-		B minDist;
+		A a;
+		B b;
 
-		KDEval(A node, B minDist) {
-			this.node = node;
-			this.minDist = minDist;
+		KDEval(A a, B b) {
+			this.a = a;
+			this.b = b;
 		}
 	}
 }

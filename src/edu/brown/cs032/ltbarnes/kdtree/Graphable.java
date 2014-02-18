@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * A class containing a {@code dimension} and list of coordinates corresponding
+ * to that dimension.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class Graphable {
 
 	public final List<Double> coordinates;
@@ -11,9 +18,9 @@ public class Graphable {
 
 	public Graphable(List<Double> coordinates, int dimension) {
 		if (coordinates.size() < dimension) {
-			System.err.println("There aren't enough coordinates to match the dimension:");
 			dimension = coordinates.size();
-			System.err.println("Setting the dimension to " + dimension);
+			System.err.println("There aren't enough coordinates to match the dimension:");
+			System.err.println("Setting the dimension to '" + dimension + "'");
 		}
 
 		List<Double> temp = new ArrayList<>(dimension);

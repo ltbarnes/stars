@@ -2,6 +2,13 @@ package edu.brown.cs032.ltbarnes.kdtree;
 
 import java.util.List;
 
+/**
+ * An instance of {@link Graphable} retained by {@link KDNode}s within a
+ * {@link KDTree}.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class KDElement extends Graphable {
 
 	public final Object value;
