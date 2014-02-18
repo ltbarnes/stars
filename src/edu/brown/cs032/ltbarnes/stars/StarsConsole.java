@@ -8,6 +8,12 @@ import edu.brown.cs032.ltbarnes.stars.engine.Command;
 import edu.brown.cs032.ltbarnes.stars.engine.StarEngine;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
+/**
+ * The class responsible for reading input from and printing output to the console.
+ * 
+ * @author ltbarnes
+ * 
+ */
 public class StarsConsole {
 
 	private StarEngine stars_;
@@ -19,14 +25,15 @@ public class StarsConsole {
 	}
 
 	/**
-	 * Reads from the command line, sends the input to a {@link KDTree} class
-	 * for to search for neighbors, then prints the nearest neighbors.
+	 * Reads from the command line, sends the input to a {@link KDTree} class for to search for
+	 * neighbors, then prints the nearest neighbors.
 	 */
 	public void startReadWriteLoop() {
 		Scanner keyboard = new Scanner(System.in);
 
 		// while EOF hasn't occurred
 		while (keyboard.hasNextLine()) {
+
 			// get user input
 			String line = keyboard.nextLine();
 			List<String> words = stars_.parseInput(line);
@@ -41,8 +48,10 @@ public class StarsConsole {
 				continue;
 			}
 
+			// run the valid command
 			List<Star> stars = stars_.executeCommand(cmd);
 
+			// print the result
 			stars_.printStars(stars);
 		}
 		keyboard.close();
