@@ -9,7 +9,6 @@ import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
 public class StarsConsole {
 
-	public static final String CMD_ERR = "ERROR: usage: \n\t\t blah";
 	private Stars stars_;
 
 	public StarsConsole(KDTree<Star> tree) {
@@ -38,7 +37,6 @@ public class StarsConsole {
 			// clean and separate input if valid
 			Command cmd;
 			if ((cmd = stars_.checkInput(words)) == null) {
-				// System.err.println(CMD_ERR);
 				continue;
 			}
 
