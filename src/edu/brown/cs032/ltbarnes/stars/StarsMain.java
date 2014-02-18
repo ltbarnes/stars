@@ -44,11 +44,6 @@ public class StarsMain {
 		if (args.length != 1) {
 			System.err.println("ERROR: Only using filename '" + args[0] + "'");
 		}
-		// only use .csv files
-		if (!args[0].endsWith(".csv")) {
-			System.err.println("ERROR: File must be a .csv file");
-			return null;
-		}
 
 		List<Star> stars = new ArrayList<>();
 		Scanner file = null;

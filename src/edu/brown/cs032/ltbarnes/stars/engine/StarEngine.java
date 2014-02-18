@@ -68,8 +68,11 @@ public class StarEngine {
 	 */
 	public Command checkInput(List<String> words) {
 
+		Command cmd = null;
+
 		// check the first and second words
-		Command cmd = checkCommandAndNumber(words.get(0), words.get(1));
+		if (words.size() >= 2)
+			cmd = checkCommandAndNumber(words.get(0), words.get(1));
 
 		// check the star name or coordinates and add them to the command object
 		Star star = null;
