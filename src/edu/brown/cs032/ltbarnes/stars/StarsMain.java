@@ -3,7 +3,6 @@ package edu.brown.cs032.ltbarnes.stars;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,20 +38,20 @@ public class StarsMain {
 			// while there is still more to read in the file
 			while (file.hasNextLine()) {
 				// split star data into list
-				List<String> words = Arrays.asList(file.nextLine().split(","));
+				String words[] = file.nextLine().split(",");
 				String name;
 				double x, y, z;
 
 				try {
-					name = words.get(1);
-					x = Double.parseDouble(words.get(2));
-					y = Double.parseDouble(words.get(3));
-					z = Double.parseDouble(words.get(4));
+					name = words[1];
+					x = Double.parseDouble(words[2]);
+					y = Double.parseDouble(words[3]);
+					z = Double.parseDouble(words[4]);
 
-					Star s = new Star(words.get(4), name, x, y, z);
+					Star s = new Star(words[0], name, x, y, z);
 					stars.add(s);
 				} catch (NumberFormatException nfe) {
-					System.err.println("ERROR: can't read coordinates of star " + words.get(0));
+					System.err.println("ERROR: can't read coordinates of star " + words[0]);
 				}
 			}
 
