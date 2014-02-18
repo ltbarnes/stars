@@ -70,7 +70,7 @@ public class Stars {
 				double z = Double.parseDouble(words.get(4));
 				cmd = new Command(words.get(0).equals("radius"), n, x, y, z);
 			} catch (NumberFormatException nfe) {
-				System.err.println("ERROR: Coordinates must be 3 numbers");
+				System.err.println("ERROR: Coordinates must be numbers");
 				System.err.println(CMD_USAGE);
 				return null;
 			}
