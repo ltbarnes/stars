@@ -201,7 +201,6 @@ public class StarTreeTest {
 		Double[] correct = { 0.0, 1.0, 1.0 };
 		assertArrayEquals(correct, coords);
 		assertEquals(1, GenericKDTree.pointDist2(new Star("", "", coords[0], coords[1], coords[2]), s), 1e-12);
-
 	}
 
 	@Test

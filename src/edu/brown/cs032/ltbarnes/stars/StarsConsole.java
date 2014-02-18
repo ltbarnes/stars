@@ -52,7 +52,9 @@ public class StarsConsole {
 			List<Star> stars = stars_.executeCommand(cmd);
 
 			// print the result
-			stars_.printStars(stars);
+			for (Star star : stars)
+				System.out.println(star.value);
+			System.out.println();
 		}
 		keyboard.close();
 	}

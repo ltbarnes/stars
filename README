@@ -2,27 +2,35 @@ Project: Stars
 Student: Logan Barnes (ltbarnes)
 
 KNOWN BUGS:
-	
+	None at the moment.
 
 DESIGN DETAILS:
+	
+	KDTree:
+		In the package edu.brown.cs032.ltbarnes.kdtree there is a KDTree interface extending Iterable and Collection. This interface is used by GenericKDTree to create a kdtree that can be used for any dimension. It uses KDNodes to organize the tree and each node contains a KDElement.
+
+	Stars:
+		In the package edu.brown.cs032.ltbarnes.stars.startree there is a Star class which extends KDElement allowing for a KDTree<Star> to be made with Star objects.
+
+	Front End:
+		The edu.brown.cs032.ltbarnes.stars package contains the StarsMain class (with the 'main' method) used to parse the arguments passed to the program. This class creates a KDTree<Star> then passes it to a new StarsConsole class which handles reading from and printing to the command line interface.
+
+	Back End:
+		The StarsConsole class uses the StarEngine class from edu.brown.cs032.ltbarnes.stars.backend to check the command line input. If the input is valid the StarEngine class then searches the given KDTree to find all neighboring stars or stars within the specified radius.
 
 
 RUNTIME/SPACE OPTIMIZATIONS:
-
+	
+	By making the KDTree class Iterable it isn't necessary to store an alternate data structure used to look up star names. The program just iterates through the tree (implemented using in-order traversal in this case) checking each star. A HashMap lookup would be faster if time was more of a concern than space but I was curious about the Iterable class and how it's implemented.
 
 RUNNING TESTS:
+
+	The 'ant unit_test' command will run the JUnit test StarTreeTest in edu.brown.cs032.ltbarnes.stars.startree and the KDTree test in edu.brown.cs032.ltbarnes.kdtree.
+
+	The 'ant system_test' will run the provided system tests as well as the tests in the test folder (in the root folder of the project).
 
 
 COMPILING/BUILDING:
 
-
-
-
-
-
-    Known bugs
-    Design details specific to your code
-    Any runtime/space optimizations you made beyond the minimum requirements
-    How to run any tests you wrote/tried by hand
-    How to build/run your program
+	The ant clean, compile, and jar commands can all be run from the root directory of the project. After the jar is created './bin/stars [file...]' should start the program.
 

@@ -216,16 +216,4 @@ public class StarEngine {
 		return stars;
 	}
 
-	/**
-	 * Prints the number of each {@link Star} in the given list.
-	 * 
-	 * @param stars
-	 *            - the list of stars to print
-	 */
-	public void printStars(List<Star> stars) {
-		for (Star star : stars)
-			System.out.println(star.value);
-		System.out.println();
-	}
-
 }
