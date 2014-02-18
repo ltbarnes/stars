@@ -3,16 +3,17 @@ package edu.brown.cs032.ltbarnes.stars;
 import java.util.List;
 import java.util.Scanner;
 
-import edu.brown.cs032.ltbarnes.stars.Stars.Command;
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
+import edu.brown.cs032.ltbarnes.kdtree.KDTree;
+import edu.brown.cs032.ltbarnes.stars.engine.Command;
+import edu.brown.cs032.ltbarnes.stars.engine.StarEngine;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 
 public class StarsConsole {
 
-	private Stars stars_;
+	private StarEngine stars_;
 
 	public StarsConsole(KDTree<Star> tree) {
-		stars_ = new Stars(tree);
+		stars_ = new StarEngine(tree);
 
 		startReadWriteLoop();
 	}

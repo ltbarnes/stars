@@ -1,6 +1,6 @@
 package edu.brown.cs032.ltbarnes.stars.startree;
 
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDNode;
+import edu.brown.cs032.ltbarnes.kdtree.KDNode;
 
 class StarNode extends KDNode<Star> {
 

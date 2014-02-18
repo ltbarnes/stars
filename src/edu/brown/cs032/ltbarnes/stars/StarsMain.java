@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
+import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.startree.Star;
 import edu.brown.cs032.ltbarnes.stars.startree.StarTree;
 

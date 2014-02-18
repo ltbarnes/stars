@@ -1,4 +1,4 @@
-package edu.brown.cs032.ltbarnes.stars.kdtree;
+package edu.brown.cs032.ltbarnes.kdtree;
 
 /**
  * An element used by {@link GenericKDTree} to keep track of children nodes and

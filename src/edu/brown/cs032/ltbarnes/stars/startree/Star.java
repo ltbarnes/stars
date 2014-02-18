@@ -1,6 +1,6 @@
 package edu.brown.cs032.ltbarnes.stars.startree;
 
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDElement;
+import edu.brown.cs032.ltbarnes.kdtree.KDElement;
 
 public class Star extends KDElement {
 

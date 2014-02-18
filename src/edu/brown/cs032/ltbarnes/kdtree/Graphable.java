@@ -1,4 +1,4 @@
-package edu.brown.cs032.ltbarnes.stars.kdtree;
+package edu.brown.cs032.ltbarnes.kdtree;
 
 import java.util.ArrayList;
 import java.util.Collections;

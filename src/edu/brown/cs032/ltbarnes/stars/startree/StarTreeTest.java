@@ -10,9 +10,9 @@ import java.util.List;
 
 import org.junit.Test;
 
+import edu.brown.cs032.ltbarnes.kdtree.GenericKDTree;
+import edu.brown.cs032.ltbarnes.kdtree.KDTree;
 import edu.brown.cs032.ltbarnes.stars.StarsMain;
-import edu.brown.cs032.ltbarnes.stars.kdtree.GenericKDTree;
-import edu.brown.cs032.ltbarnes.stars.kdtree.KDTree;
 
 public class StarTreeTest {
 
@@ -33,7 +33,7 @@ public class StarTreeTest {
 		stars.add(new Star("4", "", 1, -1, 0));
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 		assertEquals("(3: L:(1: L:(0: L:null R:null) R:(2: L:null R:null)) "
 				+ "R:(5: L:(4: L:null R:null) R:(6: L:null R:null)))", st.toString());
 		assertEquals(7, st.size());
@@ -109,7 +109,7 @@ public class StarTreeTest {
 		stars.add(new Star("4", "", 1, -1, 0));
 		stars.add(new Star("5", "", 2, 0, 0));
 		stars.add(new Star("6", "", 3, 1, 0));
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 		assertEquals(7, st.size());
 
 		st.addElement(new Star("7", "", 3, 1, 1));
@@ -175,7 +175,7 @@ public class StarTreeTest {
 			assertEquals(stars.get(i), s);
 			i++;
 		}
-		// assertEquals(i, st.size());
+		 assertEquals(i, st.size());
 	}
 
 	@Test
@@ -213,7 +213,7 @@ public class StarTreeTest {
 		stars.add(s11);
 		stars.add(s22);
 
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 
 		assertEquals("(11: L:(00: L:null R:null) R:(22: L:null R:null))", st.toString());
 
@@ -305,7 +305,7 @@ public class StarTreeTest {
 		stars.add(s9);
 		stars.add(s10);
 
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 
 		List<Star> starList = new ArrayList<>();
 		addStarsToSet(starList, s8, s7, s9);
@@ -369,7 +369,7 @@ public class StarTreeTest {
 		stars.add(s9);
 		stars.add(s10);
 
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 
 		List<Star> starList = new ArrayList<>();
 		addStarsToSet(starList, s1, s2, s3, s5, s4);
@@ -395,7 +395,7 @@ public class StarTreeTest {
 		if ((stars = StarsMain.parseInput(args)) == null)
 			return;
 
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 
 		Star s0 = new Star("0", "Sol", 0, 0, 0);
 		Star s1 = new Star("1", "", 282.43485, 0.00449, 5.36884);
@@ -460,7 +460,7 @@ public class StarTreeTest {
 		if ((stars = StarsMain.parseInput(args)) == null)
 			return;
 
-		StarTree st = new StarTree(stars);
+		KDTree<Star> st = new StarTree(stars);
 
 		Star s0 = new Star("0", "Sol", 0, 0, 0);
 		Star s1 = new Star("1", "", 282.43485, 0.00449, 5.36884);
