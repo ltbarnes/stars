@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 public class Graphable {
 
 	public final List<Double> coordinates;
@@ -42,20 +39,30 @@ public class Graphable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).append(coordinates.get(0)).append(coordinates.get(1))
-				.append(coordinates.get(2)).toHashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((coordinates == null) ? 0 : coordinates.hashCode());
+		result = prime * result + dimension;
+		return result;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o == this)
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(o instanceof Graphable))
+		if (obj == null)
 			return false;
-
-		Graphable s = (Graphable) o;
-		return new EqualsBuilder().append(s.coordinates.get(0), coordinates.get(0))
-				.append(s.coordinates.get(1), coordinates.get(1)).append(s.coordinates.get(2), coordinates.get(2))
-				.isEquals();
+		if (getClass() != obj.getClass())
+			return false;
+		Graphable other = (Graphable) obj;
+		if (coordinates == null) {
+			if (other.coordinates != null)
+				return false;
+		} else if (!coordinates.equals(other.coordinates))
+			return false;
+		if (dimension != other.dimension)
+			return false;
+		return true;
 	}
+
 }

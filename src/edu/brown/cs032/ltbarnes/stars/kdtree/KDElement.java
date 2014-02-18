@@ -2,9 +2,6 @@ package edu.brown.cs032.ltbarnes.stars.kdtree;
 
 import java.util.List;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 public class KDElement extends Graphable {
 
 	public final Object value;
@@ -21,18 +18,27 @@ public class KDElement extends Graphable {
 
 	@Override
 	public int hashCode() {
-		return new HashCodeBuilder(17, 31).appendSuper(super.hashCode()).append(value).toHashCode();
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((value == null) ? 0 : value.hashCode());
+		return result;
 	}
 
 	@Override
-	public boolean equals(Object o) {
-		if (o == this)
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		if (!(o instanceof KDElement))
+		if (!super.equals(obj))
 			return false;
-
-		KDElement s = (KDElement) o;
-		return new EqualsBuilder().appendSuper(super.equals(o)).append(s.value, value).isEquals();
+		if (getClass() != obj.getClass())
+			return false;
+		KDElement other = (KDElement) obj;
+		if (value == null) {
+			if (other.value != null)
+				return false;
+		} else if (!value.equals(other.value))
+			return false;
+		return true;
 	}
 
 }
