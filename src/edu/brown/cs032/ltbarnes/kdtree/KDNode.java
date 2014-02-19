@@ -14,23 +14,23 @@ public class KDNode<T extends KDElement> {
 	private KDNode<T> leftChild_;
 	private KDNode<T> rightChild_;
 	private int depth_;
-	private T element;
+	private T element_;
 
 	public KDNode(T element) {
-		this.element = element;
+		this.element_ = element;
 	}
 
 	public KDNode(T element, int currDepth) {
-		this.element = element;
+		this.element_ = element;
 		this.depth_ = currDepth;
 	}
 
 	public T getElement() {
-		return element;
+		return element_;
 	}
 
 	public double getDimension(int dim) {
-		return element.coordinates.get(dim);
+		return element_.coordinates.get(dim);
 	}
 
 	public void setDepth(int depth) {
@@ -61,7 +61,7 @@ public class KDNode<T extends KDElement> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((element == null) ? 0 : element.hashCode());
+		result = prime * result + ((element_ == null) ? 0 : element_.hashCode());
 		return result;
 	}
 
@@ -74,17 +74,17 @@ public class KDNode<T extends KDElement> {
 		if (getClass() != obj.getClass())
 			return false;
 		KDNode<?> other = (KDNode<?>) obj;
-		if (element == null) {
-			if (other.element != null)
+		if (element_ == null) {
+			if (other.element_ != null)
 				return false;
-		} else if (!element.equals(other.element))
+		} else if (!element_.equals(other.element_))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return String.format("(%s: L:%s R:%s)", element.value.toString(), leftChild_, rightChild_);
+		return String.format("(%s: L:%s R:%s)", element_.value.toString(), leftChild_, rightChild_);
 	}
 
 }

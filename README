@@ -21,16 +21,16 @@ DESIGN DETAILS:
 
 RUNTIME/SPACE OPTIMIZATIONS:
 	
-	By making the KDTree class Iterable it isn't necessary to store an alternate data structure used to look up star names. The program just iterates through the tree (implemented using in-order traversal in this case) checking each star. A HashMap lookup would be faster if time was more of a concern than space but I was curious about the Iterable class and how it's implemented.
+	By making the KDTree class Iterable it isn't necessary to store an alternate data structure for looking up star names. The program just iterates through the tree (implemented using in-order traversal in this case) checking each star. A HashMap lookup would be faster if time was more of a concern than space but I was curious about the Iterable class and how it is implemented.
 
 RUNNING TESTS:
 
-	The 'ant unit_test' command will run the JUnit test StarTreeTest in edu.brown.cs032.ltbarnes.stars.startree and the KDTree test in edu.brown.cs032.ltbarnes.kdtree.
+	The 'ant unit_test' command will run the JUnit test StarTreeTest in edu.brown.cs032.ltbarnes.stars.startree and the KDTreeTest in edu.brown.cs032.ltbarnes.kdtree
 
-	The 'ant system_test' will run the provided system tests as well as the tests in the test folder (in the root folder of the project).
+	The 'ant system_test' will run the provided system tests as well as the files in the test folder (in the root folder of the project).
 
 
 COMPILING/BUILDING:
 
-	The ant clean, compile, and jar commands can all be run from the root directory of the project. After the jar is created './bin/stars [file...]' should start the program.
+	The ant clean, compile, and jar commands can all be run from the root directory of the project. After the jar is created "./bin/stars [file...]" should start the program.
 

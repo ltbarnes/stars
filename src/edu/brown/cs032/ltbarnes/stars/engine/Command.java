@@ -12,45 +12,45 @@ import edu.brown.cs032.ltbarnes.stars.startree.Star;
  */
 public class Command {
 
-	private boolean radiusCmd;
-	private int neighbors;
-	private double radius;
-	private Star star;
+	private boolean radiusCmd_;
+	private int neighbors_;
+	private double radius_;
+	private Star star_;
 
 	public Command(boolean radiusCmd) {
-		this.radiusCmd = radiusCmd;
+		this.radiusCmd_ = radiusCmd;
 	}
 
 	public boolean isRadiusCmd() {
-		return radiusCmd;
+		return radiusCmd_;
 	}
 
 	public int getNeighbors() {
-		return neighbors;
+		return neighbors_;
 	}
 
 	public void setNeighbors(int neighbors) throws NegativeNumberException {
 		if (neighbors < 0)
 			throw new NegativeNumberException();
-		this.neighbors = neighbors;
+		this.neighbors_ = neighbors;
 	}
 
 	public double getRadius() {
-		return radius;
+		return radius_;
 	}
 
 	public void setRadius(double radius) throws NegativeNumberException {
 		if (radius < 0)
 			throw new NegativeNumberException();
-		this.radius = radius;
+		this.radius_ = radius;
 	}
 
 	public Star getStar() {
-		return star;
+		return star_;
 	}
 
 	public void setStar(Star star) {
-		this.star = star;
+		this.star_ = star;
 	}
 
 	/**
