@@ -9,6 +9,8 @@ DESIGN DETAILS:
 	KDTree:
 		In the package edu.brown.cs032.ltbarnes.kdtree there is a KDTree interface extending Iterable and Collection. This interface is used by GenericKDTree to create a kdtree that can be used for any dimension. It uses KDNodes to organize the tree and each node contains a KDElement.
 
+		The GenericKDTree organizes nodes by iterating through the dimensions of the nodes as the depth of the tree increases. Each root of a subtree is the median of that tree for the dimension used at the parents depth. The addElement method can create an unbalanced (where all parent nodes aren't always the median) but addElement isn't used in this program.
+
 	Stars:
 		In the package edu.brown.cs032.ltbarnes.stars.startree there is a Star class which extends KDElement allowing for a KDTree<Star> to be made with Star objects.
 
